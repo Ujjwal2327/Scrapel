@@ -456,7 +456,7 @@ const sidebarMenuButtonVariants = cva(
         outline:
           "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-accent hover:text-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--accent))]",
         active:
-          "bg-gradient-to-r from-primary to-primary/60 hover:bg-gradient-to-r hover:from-primary/90 hover:to-primary/50 text-primary-foreground hover:text-primary-foreground",
+          "bg-gradient-to-r from-primary to-primary/60 hover:bg-gradient-to-r hover:from-primary/90 hover:to-primary/50 !text-white",
       },
       size: {
         default: "h-8 text-sm",
@@ -486,6 +486,7 @@ const SidebarMenuButton = React.forwardRef(
   ) => {
     const Comp = asChild ? Slot : "button";
     const { isMobile, state } = useSidebar();
+    if (isActive) variant = "active";
 
     const button = (
       <Comp

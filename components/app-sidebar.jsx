@@ -9,9 +9,11 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Logo } from "./logo";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 // Menu items.
 const items = [
@@ -38,12 +40,14 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const { isMobile, setOpenMobile } = useSidebar();
   const pathname = usePathname();
   const activeItem =
     items.find((item) => item.url.length > 0 && pathname.includes(item.href)) ||
     items[0];
+
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>
@@ -55,12 +59,16 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    variant={activeItem.url === item.url ? "active" : "default"}
+                    isActive={activeItem.url === item.url}
+                    tooltip={item.title}
                   >
-                    <a href={item.url}>
+                    <Link
+                      href={item.url}
+                      onClick={() => isMobile && setOpenMobile(false)}
+                    >
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

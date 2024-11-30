@@ -2,18 +2,20 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { BreadcrumbHeader } from "@/components/breadcrumb-header";
+import { ModeToggle } from "@/components/theme-mode-toggle";
 
 export default function Layout({ children }) {
   return (
     <div className="flex h-screen">
       <SidebarProvider>
         <AppSidebar />
-
         <div className="flex flex-col flex-1 min-h-screen">
           <header className="flex items-center justify-between px-6 py-4 h-[50px] container">
-            <div className="flex items-center">
-              <SidebarTrigger /> <BreadcrumbHeader />
+            <div className="flex items-center gap-x-2">
+              <SidebarTrigger />
+              <BreadcrumbHeader />
             </div>
+            <ModeToggle />
           </header>
           <Separator />
           <div className="overflow-auto">
