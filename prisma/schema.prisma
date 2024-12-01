@@ -1,0 +1,30 @@
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum WorkflowStatus {
+  ACTIVE
+  INACTIVE
+  COMPLETED
+}
+
+model Workflow {
+  id          String         @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  definition  String // A JSON object stored as a string
+  status      WorkflowStatus @default(ACTIVE)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@unique([name, userId]) // Ensures a user can't have multiple workflows with the same name
+}
