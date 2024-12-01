@@ -76,3 +76,8 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* hide clerk branding */
+.cl-internal-1dauvpw {
+  @apply hidden
+}

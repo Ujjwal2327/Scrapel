@@ -3,6 +3,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { BreadcrumbHeader } from "@/components/breadcrumb-header";
 import { ModeToggle } from "@/components/theme-mode-toggle";
+import { SignedIn, UserButton } from "@clerk/nextjs";
 
 export default function Layout({ children }) {
   return (
@@ -15,7 +16,12 @@ export default function Layout({ children }) {
               <SidebarTrigger />
               <BreadcrumbHeader />
             </div>
-            <ModeToggle />
+            <div className="flex items-center gap-x-2">
+              <ModeToggle />
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </div>
           </header>
           <Separator />
           <div className="overflow-auto">
