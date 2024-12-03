@@ -19,6 +19,7 @@ export function Logo({ fontSize = "text-2xl", iconSize = 20 }) {
           Scrapel
         </span>
       </div>
+      <div className="hidden" />
     </Link>
   );
 }
