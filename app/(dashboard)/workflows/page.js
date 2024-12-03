@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Suspense } from "react";
 import { Inbox } from "lucide-react";
 import { getUserWorkflows } from "@/actions/workflows/getUserWorkflows";
