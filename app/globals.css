@@ -82,3 +82,10 @@ body {
 .cl-internal-1hp5nqm {
   @apply hidden
 }
+
+/* custom scrollbar and scroll behavior */
+* {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #8EC25D transparent;
+}

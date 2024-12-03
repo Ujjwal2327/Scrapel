@@ -1,5 +1,8 @@
 "use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Coins, Home, Layers2, ShieldCheck } from "lucide-react";
+import { Logo } from "./Logo";
 import {
   Sidebar,
   SidebarContent,
@@ -11,9 +14,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Logo } from "./logo";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
 
 // Menu items.
 const items = [
@@ -43,7 +43,7 @@ export function AppSidebar() {
   const { isMobile, setOpenMobile } = useSidebar();
   const pathname = usePathname();
   const activeItem =
-    items.find((item) => item.url.length > 0 && pathname.includes(item.href)) ||
+    items.find((item) => item.url.length > 0 && pathname.includes(item.url)) ||
     items[0];
 
   return (
@@ -63,7 +63,7 @@ export function AppSidebar() {
                     tooltip={item.title}
                   >
                     <Link
-                      href={item.url}
+                      href={item.url.length ? item.url : "/"}
                       onClick={() => isMobile && setOpenMobile(false)}
                     >
                       <item.icon />

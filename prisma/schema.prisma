@@ -11,9 +11,8 @@ datasource db {
 }
 
 enum WorkflowStatus {
-  ACTIVE
-  INACTIVE
-  COMPLETED
+  DRAFT
+  PUBLISHED
 }
 
 model Workflow {
@@ -22,7 +21,7 @@ model Workflow {
   name        String
   description String?
   definition  String // A JSON object stored as a string
-  status      WorkflowStatus @default(ACTIVE)
+  status      WorkflowStatus @default(DRAFT)
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 

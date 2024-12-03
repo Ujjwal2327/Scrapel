@@ -1,9 +1,9 @@
+import { SignedIn, UserButton } from "@clerk/nextjs";
 import { Separator } from "@/components/ui/separator";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-import { BreadcrumbHeader } from "@/components/breadcrumb-header";
-import { ModeToggle } from "@/components/theme-mode-toggle";
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import { AppSidebar } from "@/components/AppSidebar";
+import { BreadcrumbHeader } from "@/components/BreadcrumbHeader";
+import { ModeToggle } from "@/components/ModeToggle";
 
 export default function Layout({ children }) {
   return (
