@@ -89,3 +89,8 @@ body {
   scrollbar-width: thin;
   scrollbar-color: #8EC25D transparent;
 }
+
+/* react flow controls button in dark mode */
+.dark .react-flow__controls-button {
+  @apply !bg-gray-900 !border-gray-800
+}

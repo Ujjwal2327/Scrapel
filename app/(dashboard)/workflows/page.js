@@ -1,5 +1,4 @@
-export const dynamic = "force-dynamic";
-
+export const dynamic = "force-dynamic"; // Fixes build error by forcing dynamic rendering
 import { Suspense } from "react";
 import { Inbox } from "lucide-react";
 import { getUserWorkflows } from "@/actions/workflows/getUserWorkflows";

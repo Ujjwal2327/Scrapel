@@ -36,7 +36,7 @@ export function CreateWorkflowDialog({ triggerText = "Create workflow" }) {
   const { mutate, isPending } = useMutation({
     mutationFn: createWorkflow,
     onSuccess: () => {
-      toast.success("Workflow created", { id: "create-workflow" });
+      toast.success("Workflow created.", { id: "create-workflow" });
     },
     onError: (error) => {
       toast.error(error.message, { id: "create-workflow" });
@@ -44,9 +44,9 @@ export function CreateWorkflowDialog({ triggerText = "Create workflow" }) {
   });
 
   const onSubmit = useCallback(
-    (values) => {
+    (form) => {
       toast.loading("Creating workflow...", { id: "create-workflow" });
-      mutate(values);
+      mutate(form);
     },
     [mutate]
   );

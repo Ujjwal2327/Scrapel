@@ -26,7 +26,7 @@ export function DeleteWorkflowDialog({
   const { mutate, isPending } = useMutation({
     mutationFn: deleteWorkflow,
     onSuccess: () => {
-      toast.success("Workflow deleted", {
+      toast.success("Workflow deleted.", {
         id: `delete-workflow-${workflowId}`,
       });
     },
@@ -35,15 +35,12 @@ export function DeleteWorkflowDialog({
     },
   });
 
-  const onSubmit = useCallback(
-    (values) => {
-      toast.loading("Deleting workflow...", {
-        id: `delete-workflow-${workflowId}`,
-      });
-      mutate(values);
-    },
-    [mutate]
-  );
+  const onSubmit = useCallback(() => {
+    toast.loading("Deleting workflow...", {
+      id: `delete-workflow-${workflowId}`,
+    });
+    mutate(workflowId);
+  }, [mutate]);
 
   return (
     <AlertDialog
@@ -74,7 +71,7 @@ export function DeleteWorkflowDialog({
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             disabled={confirmText !== workflowName || isPending}
-            onClick={() => onSubmit(workflowId)}
+            onClick={onSubmit}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90 "
           >
             Delete

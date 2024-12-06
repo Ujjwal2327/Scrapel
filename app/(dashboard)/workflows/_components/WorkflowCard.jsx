@@ -26,7 +26,7 @@ export function WorkflowCard({ workflow }) {
         <div className="flex items-center justify-end space-x-3">
           <div
             className={cn(
-              "w-10 h-10 rounded-full flex items-center justify-center",
+              "w-10 h-10 rounded-full flex items-center justify-center !flex-shrink-0",
               isDraft ? "bg-yellow-400 text-yellow-600" : "bg-primary"
             )}
           >
@@ -39,8 +39,8 @@ export function WorkflowCard({ workflow }) {
           <div>
             <h3 className="text-base font-bold text-muted-foreground flex items-center gap-x-2">
               <Link
-                href={`/workflows/editor/${workflow.id}`}
-                className="flex items-center hover:underline"
+                href={`/workflow/editor/${workflow.id}`}
+                className="flex items-center hover:underline w-full !line-clamp-1 break-all"
               >
                 {workflow.name}
               </Link>
@@ -54,7 +54,7 @@ export function WorkflowCard({ workflow }) {
         </div>
         <div className="flex items-center space-x-2">
           <Link
-            href={`/workflows/editor/${workflow.id}`}
+            href={`/workflow/editor/${workflow.id}`}
             className={cn(
               buttonVariants({ variant: "outline", size: "sm" }),
               "hidden xs:flex items-center gap-2"

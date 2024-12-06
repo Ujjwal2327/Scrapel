@@ -4,6 +4,8 @@ import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import { UserError } from "@/lib/errors";
 import { withErrorHandling } from "@/lib/withErrorHandling";
+import { createFlowNode } from "@/lib/workflow/createFlowNode";
+import { TaskType } from "@/lib/types";
 import { createWorkflowSchema } from "@/schemas/workflows";
 
 export async function createWorkflow(form) {
@@ -17,10 +19,15 @@ export async function createWorkflow(form) {
       if (!userId)
         throw new UserError("Authentication required. Please log in.");
 
+      const initialFlow = {
+        nodes: [createFlowNode(TaskType.LAUNCH_BROWSER)],
+        edges: [],
+      };
+
       const workflow = await prisma.workflow.create({
         data: {
           userId,
-          definition: "TODO",
+          definition: JSON.stringify(initialFlow),
           ...data,
         },
       });
