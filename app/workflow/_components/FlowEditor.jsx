@@ -58,28 +58,6 @@ export function FlowEditor({ workflow }) {
     [screenToFlowPosition, setNodes]
   );
 
-  const onTouchEnd = useCallback(
-    (e) => {
-      e.preventDefault();
-
-      const touch = e.changedTouches[0];
-      const target = document.elementFromPoint(touch.clientX, touch.clientY);
-
-      if (!target || !target.hasAttribute("data-task-drag")) return;
-
-      const taskData = JSON.parse(target.getAttribute("data-task-drag"));
-      const position = screenToFlowPosition({
-        x: touch.clientX,
-        y: touch.clientY,
-      });
-      const newNode = createFlowNode(taskData.taskType, position);
-      setNodes((nodes) => nodes.concat(newNode));
-
-      e.target.removeAttribute("data-task-drag");
-    },
-    [screenToFlowPosition, setNodes]
-  );
-
   const onConnect = useCallback(
     (connection) => {
       setEdges((edges) =>
@@ -153,7 +131,6 @@ export function FlowEditor({ workflow }) {
         onDrop={onDrop}
         onConnect={onConnect}
         isValidConnection={isValidConnection}
-        onTouchEnd={onTouchEnd}
       >
         <Controls position="top-left" fitViewOptions={fitViewOptions} />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
