@@ -68,10 +68,23 @@ function TaskMenuButton({ taskType }) {
     e.dataTransfer.effectAllowed = "move";
   };
 
+  const onTouchStart = (e) => {
+    const touch = e.touches[0];
+    e.target.setAttribute(
+      "data-task-drag",
+      JSON.stringify({
+        taskType,
+        startX: touch.clientX,
+        startY: touch.clientY,
+      })
+    );
+  };
+
   return (
     <Button
       draggable
       onDragStart={onDragStart}
+      onTouchStart={onTouchStart}
       variant="secondary"
       className="flex justify-between items-center gap-2 border w-full"
     >

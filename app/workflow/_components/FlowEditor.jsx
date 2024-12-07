@@ -47,11 +47,35 @@ export function FlowEditor({ workflow }) {
   const onDrop = useCallback(
     (e) => {
       e.preventDefault();
+
       const taskType = e.dataTransfer.getData("application/reactflow");
       if (!taskType) return;
+
       const position = screenToFlowPosition({ x: e.clientX, y: e.clientY });
       const newNode = createFlowNode(taskType, position);
       setNodes((nodes) => nodes.concat(newNode));
+    },
+    [screenToFlowPosition, setNodes]
+  );
+
+  const onTouchEnd = useCallback(
+    (e) => {
+      e.preventDefault();
+
+      const touch = e.changedTouches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+
+      if (!target || !target.hasAttribute("data-task-drag")) return;
+
+      const taskData = JSON.parse(target.getAttribute("data-task-drag"));
+      const position = screenToFlowPosition({
+        x: touch.clientX,
+        y: touch.clientY,
+      });
+      const newNode = createFlowNode(taskData.taskType, position);
+      setNodes((nodes) => nodes.concat(newNode));
+
+      e.target.removeAttribute("data-task-drag");
     },
     [screenToFlowPosition, setNodes]
   );
@@ -68,11 +92,13 @@ export function FlowEditor({ workflow }) {
           edges
         )
       );
+
       if (!connection.targetHandle) return;
 
-      // remove input if it is present on connection
+      // clear the input value if it is present on connection
       const node = nodes.find((node) => node.id === connection.target);
       if (!node) return;
+
       const nodeInputs = node.data.inputs;
       updateNodeData(node.id, {
         inputs: { ...nodeInputs, [connection.targetHandle]: "" },
@@ -83,11 +109,8 @@ export function FlowEditor({ workflow }) {
 
   const isValidConnection = useCallback(
     (connection) => {
-      if (
-        connection.source === connection.target
-        // ||connection.sourceHandle !== connection.targetHandle // dont connect handles of different name (html, selector and extract text cannot connect to each another )
-      )
-        return false;
+      // dont connect handles of same node
+      if (connection.source === connection.target) return false;
 
       // dont connect handles of different type
       if (
@@ -99,7 +122,6 @@ export function FlowEditor({ workflow }) {
       // detect cycle in flow (flow should be cycle free)
       const hasCycle = (node, visited = new Set()) => {
         if (visited.has(node.id)) return false;
-
         visited.add(node.id);
 
         for (const outgoer of getOutgoers(node, nodes, edges)) {
@@ -131,6 +153,7 @@ export function FlowEditor({ workflow }) {
         onDrop={onDrop}
         onConnect={onConnect}
         isValidConnection={isValidConnection}
+        onTouchEnd={onTouchEnd}
       >
         <Controls position="top-left" fitViewOptions={fitViewOptions} />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
