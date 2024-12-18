@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "postinstall": "prisma generate && prisma migrate deploy",
+    "postinstall": "puppeteer install && prisma generate && prisma migrate deploy",
     "lint": "next lint"
   },
   "dependencies": {
