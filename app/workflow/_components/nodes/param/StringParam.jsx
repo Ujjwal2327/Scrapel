@@ -16,7 +16,7 @@ export function StringParam({ param, value, updateNodeParamValue, disabled }) {
 
   return (
     <div className="space-y-1 p-1 w-full">
-      <Label htmlFor={id} className="text-xs flex">
+      <Label htmlFor={id} className="text-xs">
         {param.name}
         {param.required && <span className="text-red-400 px-2">*</span>}
       </Label>
@@ -29,7 +29,10 @@ export function StringParam({ param, value, updateNodeParamValue, disabled }) {
         placeholder={
           disabled ? "Value added automatically" : "Enter value here"
         }
-        className={cn("text-xs h-auto", disabled && "resize-none")}
+        className={cn(
+          "text-xs h-auto bg-background",
+          disabled && "resize-none"
+        )}
         style={disabled ? { height: "auto" } : undefined}
       />
       {param.helperText && (

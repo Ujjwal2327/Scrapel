@@ -16,14 +16,86 @@ enum WorkflowStatus {
 }
 
 model Workflow {
-  id          String         @id @default(cuid())
-  userId      String
-  name        String
-  description String?
-  definition  String // A JSON object stored as a string
-  status      WorkflowStatus @default(DRAFT)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id            String              @id @default(cuid())
+  userId        String
+  name          String
+  description   String?
+  definition    String // A JSON object stored as a string
+  status        WorkflowStatus      @default(DRAFT)
+  lastRunId     String?
+  lastRunStatus String?
+  lastRunAt     DateTime?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  executions    WorkflowExecution[]
 
   @@unique([name, userId]) // Ensures a user can't have multiple workflows with the same name
+}
+
+enum WorkflowExecutionStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum WorkflowExecutionTrigger {
+  MANUAL
+}
+
+model WorkflowExecution {
+  id              String                   @id @default(cuid())
+  userId          String
+  workflowId      String
+  definition      String
+  trigger         WorkflowExecutionTrigger
+  status          WorkflowExecutionStatus
+  startedAt       DateTime?
+  completedAt     DateTime?
+  createdAt       DateTime                 @default(now())
+  creditsConsumed Int                      @default(0)
+  phases          ExecutionPhase[]
+
+  workflow Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+}
+
+enum ExecutionPhaseStatus {
+  CREATED
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+model ExecutionPhase {
+  id                  String               @id @default(cuid())
+  userId              String
+  status              ExecutionPhaseStatus
+  number              Int
+  node                String
+  name                String
+  startedAt           DateTime?
+  completedAt         DateTime?
+  inputs              String?
+  outputs             String?
+  creditsConsumed     Int                  @default(0)
+  workflowExecutionId String
+  logs                ExecutionLog[]
+
+  execution WorkflowExecution @relation(fields: [workflowExecutionId], references: [id], onDelete: Cascade)
+}
+
+model ExecutionLog {
+  id               String   @id @default(cuid())
+  label            String
+  message          String
+  timestamp        DateTime @default(now())
+  executionPhaseId String
+
+  executionPhase ExecutionPhase @relation(fields: [executionPhaseId], references: [id], onDelete: Cascade)
+}
+
+model UserBalance {
+  userId  String @id
+  credits Int    @default(0)
 }

@@ -6,9 +6,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export function TooltipWrapper({ children, content, side }) {
+export function TooltipWrapper({ children, content, side, delay = 0 }) {
   return (
-    <TooltipProvider delayDuration={0}>
+    <TooltipProvider delayDuration={delay}>
       <Tooltip>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent side={side}>{content}</TooltipContent>

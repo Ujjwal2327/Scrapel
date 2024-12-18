@@ -19,6 +19,12 @@ module.exports = {
       screens: {
         xs: "500px",
       },
+      width: {
+        90: "22.5rem",
+      },
+      minWidth: {
+        90: "22.5rem",
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

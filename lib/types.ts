@@ -3,6 +3,25 @@ export enum WorkflowStatus {
   PUBLISHED = "PUBLISHED"
 }
 
+export enum WorkflowExecutionStatus {
+  PENDING = "PENDING",
+  RUNNING = "RUNNING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+}
+
+export enum WorkflowExecutionTrigger {
+  MANUAL = "MANUAL",
+}
+
+export enum ExecutionPhaseStatus {
+  CREATED = "CREATED",
+  PENDING = "PENDING",
+  RUNNING = "RUNNING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+}
+
 export enum TaskType {
   LAUNCH_BROWSER = "LAUNCH_BROWSER",
   PAGE_TO_HTML = "PAGE_TO_HTML",
@@ -20,4 +39,10 @@ export enum TaskParamName {
   Selector = "Selector",
   WebsiteUrl = "Website Url",
   WebPage = "Web page",
+}
+
+export enum FlowToExecutionPlanError {
+  NO_ENTRY_POINT = "NO ENTRY POINT",
+  INVALID_INPUTS = "INVALID INPUTS",
+  UNEXPECTED = "UNEXPECTED",
 }

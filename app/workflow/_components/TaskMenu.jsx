@@ -22,7 +22,7 @@ export function TaskMenu() {
         open && "border-b-2 sm:border-b-0 sm:border-r-2"
       )}
     >
-      <TooltipWrapper content="toggle menu" side="right">
+      <TooltipWrapper content="Toggle menu" side="right" delay={700}>
         <Button
           onClick={() => setOpen((prev) => !prev)}
           variant="ghost"

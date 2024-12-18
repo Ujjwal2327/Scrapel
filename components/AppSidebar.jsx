@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Coins, Home, Layers2, ShieldCheck } from "lucide-react";
 import { Logo } from "./Logo";
+import { UserAvailableCreditsBadge } from "./UserAvailableCreditsBadge";
 import {
   Sidebar,
   SidebarContent,
@@ -49,11 +50,14 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>
+        <SidebarGroup className="space-y-7">
+          <SidebarGroupLabel className="flex justify-center">
             <Logo />
           </SidebarGroupLabel>
-          <SidebarGroupContent className="pt-5">
+          <SidebarGroupLabel>
+            <UserAvailableCreditsBadge />
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>

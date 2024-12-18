@@ -9,6 +9,11 @@ import { WorkflowStatus } from "@/lib/types";
 export async function updateWorkflow({ id, definition }) {
   return withErrorHandling(
     async () => {
+      if (!id || typeof id !== "string")
+        throw new UserError("Invalid workflow ID.");
+      if (!definition || typeof definition !== "string")
+        throw new UserError("Invalid flow.");
+
       const { userId } = await auth();
       if (!userId)
         throw new UserError("Authentication required. Please log in.");
