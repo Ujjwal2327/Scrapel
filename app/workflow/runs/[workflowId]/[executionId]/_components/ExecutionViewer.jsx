@@ -195,7 +195,12 @@ function Sidebar({
     {
       icon: CircleDashed,
       label: "Status",
-      value: workflowExecution?.status,
+      value: (
+        <div className="font-semibold capitalize flex gap-2 items-center">
+          <PhaseStatusBadge status={workflowExecution?.status} />
+          <span>{workflowExecution?.status}</span>
+        </div>
+      ),
     },
     {
       icon: Calendar,

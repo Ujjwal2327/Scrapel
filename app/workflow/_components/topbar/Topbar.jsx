@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { ExecuteButton } from "./ExecuteButton";
 import { SaveButton } from "./SaveButton";
+import { NavigationTabs } from "./NavigationTabs";
 import { TooltipWrapper } from "@/components/TooltipWrapper";
 import { Button } from "@/components/ui/button";
 
@@ -13,13 +14,7 @@ export function Topbar({ title, subtitle, workflowId, hideButtons = false }) {
     <header className="flex flex-wrap gap-x-10 gap-y-3 p-2 border-b-2 border-separate justify-between items-center w-full sticky top-0 bg-background z-10">
       <div className="flex items-center gap-1">
         <TooltipWrapper content="Back" side="right" delay={700}>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => {
-              router.push("/workflows");
-            }}
-          >
+          <Button variant="ghost" size="icon" onClick={() => router.back()}>
             <ChevronLeft size={20} />
           </Button>
         </TooltipWrapper>
@@ -32,11 +27,14 @@ export function Topbar({ title, subtitle, workflowId, hideButtons = false }) {
           )}
         </div>
       </div>
-      {!hideButtons && (
+      <NavigationTabs workflowId={workflowId} />
+      {!hideButtons ? (
         <div className="flex gap-x-3">
           <ExecuteButton workflowId={workflowId} />
           <SaveButton workflowId={workflowId} />
         </div>
+      ) : (
+        <div className="w-56" />
       )}
     </header>
   );
