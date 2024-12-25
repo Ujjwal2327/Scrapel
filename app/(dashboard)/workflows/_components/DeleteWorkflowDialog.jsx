@@ -22,23 +22,20 @@ export function DeleteWorkflowDialog({
   workflowId,
 }) {
   const [confirmText, setConfirmText] = useState("");
+  const toastId = `delete-workflow-${workflowId}`;
 
   const { mutate, isPending } = useMutation({
     mutationFn: deleteWorkflow,
     onSuccess: () => {
-      toast.success("Workflow deleted.", {
-        id: `delete-workflow-${workflowId}`,
-      });
+      toast.success("Workflow deleted.", { id: toastId });
     },
     onError: (error) => {
-      toast.error(error.message, { id: `delete-workflow-${workflowId}` });
+      toast.error(error.message, { id: toastId });
     },
   });
 
   const onSubmit = useCallback(() => {
-    toast.loading("Deleting workflow...", {
-      id: `delete-workflow-${workflowId}`,
-    });
+    toast.loading("Deleting workflow...", { id: toastId });
     mutate(workflowId);
   }, [mutate]);
 

@@ -1,16 +1,12 @@
 import { useCallback } from "react";
 import { toast } from "sonner";
-import { useReactFlow } from "@xyflow/react";
 import { useMutation } from "@tanstack/react-query";
 import { Play } from "lucide-react";
 import { runWorkflow } from "@/actions/workflows/runWorkflow";
-import { useExecutionPlan } from "@/hooks/useExecutionPlan";
 import { Button } from "@/components/ui/button";
 
-export function ExecuteButton({ workflowId }) {
+export function ExecutePublishedWorkflowButton({ workflowId }) {
   const toastId = `start-workflow-execution-${workflowId}`;
-  const generateExecutionPlan = useExecutionPlan();
-  const { toObject } = useReactFlow();
 
   const { mutate, isPending } = useMutation({
     mutationFn: runWorkflow,
@@ -22,24 +18,17 @@ export function ExecuteButton({ workflowId }) {
     },
   });
 
-  const onSubmit = useCallback(
-    (id, definition) => {
-      toast.loading("Starting execution...", { id: toastId });
-      mutate({ id, definition });
-    },
-    [mutate]
-  );
+  const onSubmit = useCallback(() => {
+    toast.loading("Starting execution...", { id: toastId });
+    mutate({ id: workflowId });
+  }, [mutate]);
 
   return (
     <Button
-      onClick={() => {
-        const executionPlan = generateExecutionPlan();
-        if (!executionPlan) return; // client side validation
-        const workflowDefinition = JSON.stringify(toObject());
-        onSubmit(workflowId, workflowDefinition);
-      }}
+      onClick={onSubmit}
       disabled={isPending}
-      variant="secondary"
+      variant="outline"
+      siae="sm"
       className="flex items-center gap-2"
     >
       <Play size={16} className="stroke-primary" /> Run

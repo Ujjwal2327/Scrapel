@@ -7,21 +7,22 @@ import { updateWorkflow } from "@/actions/workflows/updateWorkflow";
 import { Button } from "@/components/ui/button";
 
 export function SaveButton({ workflowId }) {
+  const toastId = `save-workflow-${workflowId}`;
   const { toObject } = useReactFlow();
 
   const { mutate, isPending } = useMutation({
     mutationFn: updateWorkflow,
     onSuccess: () => {
-      toast.success("Workflow saved.", { id: "save-workflow" });
+      toast.success("Workflow saved.", { id: toastId });
     },
     onError: (error) => {
-      toast.error(error.message, { id: "save-workflow" });
+      toast.error(error.message, { id: toastId });
     },
   });
 
   const onSubmit = useCallback(
     (id, definition) => {
-      toast.loading("Saving workflow...", { id: "save-workflow" });
+      toast.loading("Saving workflow...", { id: toastId });
       mutate({ id, definition });
     },
     [mutate]

@@ -3,11 +3,19 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { ExecuteButton } from "./ExecuteButton";
 import { SaveButton } from "./SaveButton";
+import { PublishButton } from "./PublishButton";
+import { UnpublishButton } from "./UnpublishButton";
 import { NavigationTabs } from "./NavigationTabs";
 import { TooltipWrapper } from "@/components/TooltipWrapper";
 import { Button } from "@/components/ui/button";
 
-export function Topbar({ title, subtitle, workflowId, hideButtons = false }) {
+export function Topbar({
+  title,
+  subtitle,
+  workflowId,
+  hideButtons = false,
+  isPublished = false,
+}) {
   const router = useRouter();
 
   return (
@@ -27,14 +35,23 @@ export function Topbar({ title, subtitle, workflowId, hideButtons = false }) {
           )}
         </div>
       </div>
-      <NavigationTabs workflowId={workflowId} />
-      {!hideButtons ? (
+
+      <div className="md:order-last">
+        <NavigationTabs workflowId={workflowId} />
+      </div>
+
+      {!hideButtons && (
         <div className="flex gap-x-3">
           <ExecuteButton workflowId={workflowId} />
-          <SaveButton workflowId={workflowId} />
+          {isPublished ? (
+            <UnpublishButton workflowId={workflowId} />
+          ) : (
+            <>
+              <SaveButton workflowId={workflowId} />
+              <PublishButton workflowId={workflowId} />
+            </>
+          )}
         </div>
-      ) : (
-        <div className="w-56" />
       )}
     </header>
   );

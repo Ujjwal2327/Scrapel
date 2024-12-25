@@ -11,36 +11,49 @@ import {
   ExecutionPhaseStatus,
   WorkflowExecutionStatus,
   WorkflowExecutionTrigger,
+  WorkflowStatus,
 } from "@/lib/types";
-import { getFlowToExecutionPlanErrorMessage } from "@/lib/utils";
+import {
+  getFlowToExecutionPlanErrorMessage,
+  validateExecutionPlan,
+} from "@/lib/utils";
 
-export async function runWorkflow({ id, definition }) {
+export async function runWorkflow({ id, definition = null }) {
   return withErrorHandling(
     async () => {
       if (!id || typeof id !== "string")
         throw new UserError("Invalid workflow ID.");
-      if (!definition || typeof definition !== "string")
-        throw new UserError("Invalid flow.");
 
       const { userId } = await auth();
       if (!userId)
         throw new UserError("Authentication required. Please log in.");
 
-      await prisma.workflow.findUniqueOrThrow({
+      const workflow = await prisma.workflow.findUniqueOrThrow({
         where: {
           id,
           userId,
         },
       });
 
-      const flow = JSON.parse(definition);
-      const { executionPlan, error } = flowToExecutionPlan(
-        flow.nodes,
-        flow.edges
-      );
-      if (error) {
-        const errorMessage = getFlowToExecutionPlanErrorMessage(error.type);
-        throw new UserError(errorMessage);
+      let executionPlan;
+      if (workflow.status === WorkflowStatus.PUBLISHED) {
+        executionPlan = JSON.parse(workflow.executionPlan);
+        definition = workflow.definition;
+      } else {
+        if (!definition || typeof definition !== "string")
+          throw new UserError("Invalid flow.");
+        const flow = JSON.parse(definition);
+
+        const { executionPlan: newExecutionPlan, error } = flowToExecutionPlan(
+          flow.nodes,
+          flow.edges
+        );
+
+        if (error) {
+          const errorMessage = getFlowToExecutionPlanErrorMessage(error.type);
+          throw new UserError(errorMessage);
+        }
+        executionPlan = newExecutionPlan;
       }
 
       const isValidExecutionPlan = validateExecutionPlan(executionPlan);
@@ -82,76 +95,4 @@ export async function runWorkflow({ id, definition }) {
     "runWorkflow",
     "execute workflow"
   );
-}
-
-function validateExecutionPlan(executionPlan) {
-  if (!executionPlan) {
-    console.log("No execution plan generated.");
-    return false;
-  }
-
-  if (!Array.isArray(executionPlan)) {
-    console.log("Execution plan should be an array.");
-    return false;
-  }
-
-  for (let i = 0; i < executionPlan.length; i++) {
-    const { phase, nodes } = executionPlan[i];
-
-    if (typeof phase !== "number") {
-      console.log(`Invalid phase at index ${i}. Phase should be a number.`);
-      return false;
-    }
-
-    if (!Array.isArray(nodes)) {
-      console.log(`Invalid nodes at index ${i}. Nodes should be an array.`);
-      return false;
-    }
-
-    for (let j = 0; j < nodes.length; j++) {
-      const node = nodes[j];
-
-      if (typeof node !== "object" || node === null) {
-        console.log(
-          `Invalid node at phase ${phase}, node index ${j}. Expected an object.`
-        );
-        return false;
-      }
-
-      if (typeof node.id !== "string") {
-        console.log(
-          `Invalid node id at phase ${phase}, node index ${j}. Node id should be a string.`
-        );
-        return false;
-      }
-
-      if (typeof node.type !== "string") {
-        console.log(
-          `Invalid node type at phase ${phase}, node index ${j}. Node type should be a string.`
-        );
-        return false;
-      }
-
-      if (typeof node.data !== "object" || node.data === null) {
-        console.log(
-          `Invalid node data at phase ${phase}, node index ${j}. Node data should be an object.`
-        );
-        return false;
-      }
-
-      const taskType = node.data?.type;
-      if (
-        !taskType ||
-        !TaskRegistry[taskType] ||
-        !TaskRegistry[taskType].label
-      ) {
-        console.log(
-          `Invalid node data.type at phase ${phase}, node index ${j}. Node data.type should be a valid type.`
-        );
-        return false;
-      }
-    }
-  }
-
-  return true;
 }

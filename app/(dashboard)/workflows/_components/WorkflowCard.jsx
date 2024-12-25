@@ -5,6 +5,7 @@ import { FileText, MoreVertical, Play, Shuffle, Trash } from "lucide-react";
 import { WorkflowStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { DeleteWorkflowDialog } from "./DeleteWorkflowDialog";
+import { ExecutePublishedWorkflowButton } from "./ExecutePublishedWorkflowButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -53,6 +54,9 @@ export function WorkflowCard({ workflow }) {
           </div>
         </div>
         <div className="flex items-center space-x-2">
+          {!isDraft && (
+            <ExecutePublishedWorkflowButton workflowId={workflow.id} />
+          )}
           <Link
             href={`/workflow/editor/${workflow.id}`}
             className={cn(

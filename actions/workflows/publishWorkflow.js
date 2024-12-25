@@ -4,9 +4,15 @@ import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import { UserError } from "@/lib/errors";
 import { withErrorHandling } from "@/lib/withErrorHandling";
+import { flowToExecutionPlan } from "@/lib/workflow/flowToExecutionPlan";
 import { WorkflowStatus } from "@/lib/types";
+import {
+  calculateWorkflowCost,
+  getFlowToExecutionPlanErrorMessage,
+  validateExecutionPlan,
+} from "@/lib/utils";
 
-export async function updateWorkflow({ id, definition }) {
+export async function publishWorkflow({ id, definition }) {
   return withErrorHandling(
     async () => {
       if (!id || typeof id !== "string")
@@ -28,6 +34,21 @@ export async function updateWorkflow({ id, definition }) {
       if (workflow.status !== WorkflowStatus.DRAFT)
         throw new UserError("Workflow must be in draft status.");
 
+      const flow = JSON.parse(definition);
+      const { executionPlan, error } = flowToExecutionPlan(
+        flow.nodes,
+        flow.edges
+      );
+      if (error) {
+        const errorMessage = getFlowToExecutionPlanErrorMessage(error.type);
+        throw new UserError(errorMessage);
+      }
+
+      const isValidExecutionPlan = validateExecutionPlan(executionPlan);
+      if (!isValidExecutionPlan) throw new UserError("Invalid execution plan.");
+
+      const creditsCost = calculateWorkflowCost(flow.nodes);
+
       await prisma.workflow.update({
         where: {
           id,
@@ -35,12 +56,15 @@ export async function updateWorkflow({ id, definition }) {
         },
         data: {
           definition,
+          executionPlan: JSON.stringify(executionPlan),
+          creditsCost,
+          status: WorkflowStatus.PUBLISHED,
         },
       });
 
-      revalidatePath("/workflows");
+      revalidatePath(`/workflow/editor/${id}`);
     },
-    "updateWorkflow",
-    "save workflow"
+    "publishWorkflow",
+    "publish workflow"
   );
 }

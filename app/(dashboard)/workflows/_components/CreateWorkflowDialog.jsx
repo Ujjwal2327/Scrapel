@@ -24,6 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 export function CreateWorkflowDialog({ triggerText = "Create workflow" }) {
   const [open, setOpen] = useState(false);
+  const toastId = "create-workflow";
 
   const form = useForm({
     resolver: zodResolver(createWorkflowSchema),
@@ -36,16 +37,16 @@ export function CreateWorkflowDialog({ triggerText = "Create workflow" }) {
   const { mutate, isPending } = useMutation({
     mutationFn: createWorkflow,
     onSuccess: () => {
-      toast.success("Workflow created.", { id: "create-workflow" });
+      toast.success("Workflow created.", { id: toastId });
     },
     onError: (error) => {
-      toast.error(error.message, { id: "create-workflow" });
+      toast.error(error.message, { id: toastId });
     },
   });
 
   const onSubmit = useCallback(
     (form) => {
-      toast.loading("Creating workflow...", { id: "create-workflow" });
+      toast.loading("Creating workflow...", { id: toastId });
       mutate(form);
     },
     [mutate]

@@ -6,13 +6,11 @@ import { UserError } from "@/lib/errors";
 import { withErrorHandling } from "@/lib/withErrorHandling";
 import { WorkflowStatus } from "@/lib/types";
 
-export async function updateWorkflow({ id, definition }) {
+export async function unpublishWorkflow(id) {
   return withErrorHandling(
     async () => {
       if (!id || typeof id !== "string")
         throw new UserError("Invalid workflow ID.");
-      if (!definition || typeof definition !== "string")
-        throw new UserError("Invalid flow.");
 
       const { userId } = await auth();
       if (!userId)
@@ -25,8 +23,8 @@ export async function updateWorkflow({ id, definition }) {
         },
       });
 
-      if (workflow.status !== WorkflowStatus.DRAFT)
-        throw new UserError("Workflow must be in draft status.");
+      if (workflow.status !== WorkflowStatus.PUBLISHED)
+        throw new UserError("Workflow must be in published status.");
 
       await prisma.workflow.update({
         where: {
@@ -34,13 +32,15 @@ export async function updateWorkflow({ id, definition }) {
           userId,
         },
         data: {
-          definition,
+          executionPlan: null,
+          creditsCost: 0,
+          status: WorkflowStatus.DRAFT,
         },
       });
 
-      revalidatePath("/workflows");
+      revalidatePath(`/workflow/editor/${id}`);
     },
-    "updateWorkflow",
-    "save workflow"
+    "unpublishWorkflow",
+    "unpublish workflow"
   );
 }

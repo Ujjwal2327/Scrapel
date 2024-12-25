@@ -11,8 +11,8 @@ export default function ExecutionViewerPage({ params }) {
   return (
     <div className="flex flex-col h-screen w-full overflow-hidden">
       <Topbar
-        title="Workflow execution details"
-        subtitle={`Execution ID: ${executionId}`}
+        title="Workflow run details"
+        subtitle={`Run ID: ${executionId}`}
         workflowId={workflowId}
         hideButtons
       />

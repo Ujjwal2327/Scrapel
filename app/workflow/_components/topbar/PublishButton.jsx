@@ -2,20 +2,20 @@ import { useCallback } from "react";
 import { toast } from "sonner";
 import { useReactFlow } from "@xyflow/react";
 import { useMutation } from "@tanstack/react-query";
-import { Play } from "lucide-react";
-import { runWorkflow } from "@/actions/workflows/runWorkflow";
+import { Upload } from "lucide-react";
+import { publishWorkflow } from "@/actions/workflows/publishWorkflow";
 import { useExecutionPlan } from "@/hooks/useExecutionPlan";
 import { Button } from "@/components/ui/button";
 
-export function ExecuteButton({ workflowId }) {
-  const toastId = `start-workflow-execution-${workflowId}`;
+export function PublishButton({ workflowId }) {
   const generateExecutionPlan = useExecutionPlan();
   const { toObject } = useReactFlow();
+  const toastId = `publish-workflow-${workflowId}`;
 
   const { mutate, isPending } = useMutation({
-    mutationFn: runWorkflow,
+    mutationFn: publishWorkflow,
     onSuccess: () => {
-      toast.success("Execution started.", { id: toastId });
+      toast.success("Workflow published.", { id: toastId });
     },
     onError: (error) => {
       toast.error(error.message, { id: toastId });
@@ -24,7 +24,7 @@ export function ExecuteButton({ workflowId }) {
 
   const onSubmit = useCallback(
     (id, definition) => {
-      toast.loading("Starting execution...", { id: toastId });
+      toast.loading("Publishing workflow...", { id: toastId });
       mutate({ id, definition });
     },
     [mutate]
@@ -42,7 +42,7 @@ export function ExecuteButton({ workflowId }) {
       variant="secondary"
       className="flex items-center gap-2"
     >
-      <Play size={16} className="stroke-primary" /> Run
+      <Upload size={16} className="stroke-primary" /> Publish
     </Button>
   );
 }

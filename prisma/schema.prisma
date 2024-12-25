@@ -21,6 +21,8 @@ model Workflow {
   name          String
   description   String?
   definition    String // A JSON object stored as a string
+  executionPlan String?
+  creditsCost   Int                 @default(0)
   status        WorkflowStatus      @default(DRAFT)
   lastRunId     String?
   lastRunStatus String?
