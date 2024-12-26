@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 import { UserError } from "@/lib/errors";
 import { withErrorHandling } from "@/lib/withErrorHandling";
 
-export async function deleteWorkflow(id) {
+export async function unscheduleWorkflow(id) {
   return withErrorHandling(
     async () => {
       if (!id || typeof id !== "string")
@@ -15,16 +15,20 @@ export async function deleteWorkflow(id) {
       if (!userId)
         throw new UserError("Authentication required. Please log in.");
 
-      await prisma.workflow.delete({
+      await prisma.workflow.update({
         where: {
           id,
           userId,
         },
+        data: {
+          cron: null,
+          nextRunAt: null,
+        },
       });
 
-      revalidatePath(`/workflows`);
+      revalidatePath("/workflows");
     },
-    "deleteWorkflow",
-    "delete workflow"
+    "unscheduleWorkflow",
+    "unschedule workflow"
   );
 }

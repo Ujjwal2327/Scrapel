@@ -24,9 +24,11 @@ model Workflow {
   executionPlan String?
   creditsCost   Int                 @default(0)
   status        WorkflowStatus      @default(DRAFT)
+  cron          String? //
   lastRunId     String?
   lastRunStatus String?
   lastRunAt     DateTime?
+  nextRunAt     DateTime?
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
   executions    WorkflowExecution[]
@@ -43,6 +45,7 @@ enum WorkflowExecutionStatus {
 
 enum WorkflowExecutionTrigger {
   MANUAL
+  CRON
 }
 
 model WorkflowExecution {

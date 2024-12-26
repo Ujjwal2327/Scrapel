@@ -1,11 +1,32 @@
 "use client";
 import { useState } from "react";
+import { format, formatDistanceToNow } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import Link from "next/link";
-import { FileText, MoreVertical, Play, Shuffle, Trash } from "lucide-react";
+import {
+  ChevronRight,
+  Clock,
+  Coins,
+  Copy,
+  CornerDownRight,
+  FileText,
+  MoreVertical,
+  MoveRight,
+  Play,
+  Shuffle,
+  Trash,
+} from "lucide-react";
 import { WorkflowStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { DeleteWorkflowDialog } from "./DeleteWorkflowDialog";
+import { DuplicateWorkflowDialog } from "./DuplicateWorkflowDialog";
 import { ExecutePublishedWorkflowButton } from "./ExecutePublishedWorkflowButton";
+import { SchedulerDialog } from "./SchedulerDialog";
+import { TooltipWrapper } from "@/components/TooltipWrapper";
+import {
+  ExecutionStatusIndicator,
+  ExecutionStatusLabel,
+} from "@/components/ExecutionStatusComponents";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -17,7 +38,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { TooltipWrapper } from "@/components/TooltipWrapper";
 
 export function WorkflowCard({ workflow }) {
   const isDraft = workflow.status === WorkflowStatus.DRAFT;
@@ -39,18 +59,26 @@ export function WorkflowCard({ workflow }) {
           </div>
           <div>
             <h3 className="text-base font-bold text-muted-foreground flex items-center gap-x-2">
-              <Link
-                href={`/workflow/editor/${workflow.id}`}
-                className="flex items-center hover:underline w-full !line-clamp-1 break-all"
-              >
-                {workflow.name}
-              </Link>
+              <TooltipWrapper content={workflow.description} delay={700}>
+                <Link
+                  href={`/workflow/editor/${workflow.id}`}
+                  className="flex items-center hover:underline w-full !line-clamp-1 break-all"
+                >
+                  {workflow.name}
+                </Link>
+              </TooltipWrapper>
               {isDraft && (
                 <Badge className="rounded-full font-medium bg-yellow-100 text-yellow-800 hover:bg-yellow-100 px-2">
                   Draft
                 </Badge>
               )}
             </h3>
+            <ScheduleSection
+              workflowId={workflow.id}
+              isDraft={isDraft}
+              creditsCost={workflow.creditsCost}
+              cron={workflow.cron}
+            />
           </div>
         </div>
         <div className="flex items-center space-x-2">
@@ -66,18 +94,30 @@ export function WorkflowCard({ workflow }) {
           >
             <Shuffle size={16} /> Edit
           </Link>
-          <WorkflowActions
-            workflowName={workflow.name}
-            workflowId={workflow.id}
-          />
+          <WorkflowActions workflow={workflow} />
         </div>
       </CardContent>
+      <LastRunDetails workflow={workflow} isDraft={isDraft} />
     </Card>
   );
 }
 
-function WorkflowActions({ workflowName, workflowId }) {
+function WorkflowActions({ workflow }) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
+  const { id, name, description } = workflow;
+
+  const handleDialogToggle = (dialogType) => {
+    switch (dialogType) {
+      case "delete":
+        setShowDeleteDialog((prev) => !prev);
+        break;
+      case "duplicate":
+        setShowDuplicateDialog((prev) => !prev);
+        break;
+    }
+  };
+
   return (
     <>
       <DropdownMenu>
@@ -90,16 +130,22 @@ function WorkflowActions({ workflowName, workflowId }) {
             </TooltipWrapper>
           </Button>
         </DropdownMenuTrigger>
+
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onSelect={() => {
-              setShowDeleteDialog((prev) => !prev);
-            }}
-            className="text-destructive space-x-2"
+            onSelect={() => handleDialogToggle("delete")}
+            className="text-destructive focus:text-destructive/90 space-x-2"
           >
             <Trash size={16} /> Delete
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            onSelect={() => handleDialogToggle("duplicate")}
+            className="space-x-2"
+          >
+            <Copy size={16} /> Duplicate
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -107,9 +153,82 @@ function WorkflowActions({ workflowName, workflowId }) {
       <DeleteWorkflowDialog
         open={showDeleteDialog}
         setOpen={setShowDeleteDialog}
-        workflowName={workflowName}
-        workflowId={workflowId}
+        workflowId={id}
+        workflowName={name}
+      />
+
+      <DuplicateWorkflowDialog
+        open={showDuplicateDialog}
+        setOpen={setShowDuplicateDialog}
+        workflowId={id}
+        workflowName={name}
+        workflowDescription={description}
       />
     </>
+  );
+}
+
+function ScheduleSection({ workflowId, isDraft, creditsCost, cron }) {
+  if (isDraft) return null;
+
+  return (
+    <div className="flex items-center gap-2">
+      <CornerDownRight className="h-4 w-4 text-muted-foreground" />
+      <SchedulerDialog workflowId={workflowId} initialCron={cron} />
+      <MoveRight className="h-4 w-4 text-muted-foreground" />
+      <div className="flex items-center gap-3">
+        <Badge
+          variant="outline"
+          className="space-x-2 text-muted-foreground rounded-sm"
+        >
+          <Coins className="h-4 w-4" />
+          <span className="text-sm">{creditsCost}</span>
+        </Badge>
+      </div>
+    </div>
+  );
+}
+
+function LastRunDetails({ workflow, isDraft }) {
+  if (isDraft) return null;
+
+  const { lastRunId, lastRunAt, lastRunStatus, nextRunAt } = workflow;
+  const formattedStartedAt =
+    lastRunAt && formatDistanceToNow(lastRunAt, { addSuffix: true });
+
+  const nextSchedule = nextRunAt && format(nextRunAt, "dd-MM-yyyy HH-mm-ss");
+  const nextScheduleUTC =
+    nextRunAt && formatInTimeZone(nextRunAt, "UTC", "HH-mm");
+
+  return (
+    <div className="bg-primary/5 px-4 py-1 flex flex-wrap gap-x-6 gap-y-2 justify-between items-center text-muted-foreground">
+      <div className="flex items-center text-sm gap-2">
+        {lastRunAt ? (
+          <Link
+            href={`/workflow/runs/${workflow.id}/${lastRunId}`}
+            className="flex items-center text-sm gap-2 group"
+          >
+            <span className="font-semibold">Last run:</span>
+            <ExecutionStatusIndicator status={lastRunStatus} />
+            <ExecutionStatusLabel status={lastRunStatus} />
+            <span>{formattedStartedAt}</span>
+            <ChevronRight
+              size={14}
+              className="-translate-x-0.5 group-hover:translate-x-0 transition"
+            />
+          </Link>
+        ) : (
+          <p>No runs yet</p>
+        )}
+      </div>
+      {nextRunAt && (
+        <div className="flex items-center text-sm gap-2">
+          <Clock size={12} />
+          <span className="font-semibold">Next run at:</span>
+          <span>{nextSchedule}</span>
+          <span className="text-xs">({nextScheduleUTC} UTC)</span>
+        </div>
+      )}
+    </div>
   );
 }

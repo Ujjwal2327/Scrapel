@@ -18,8 +18,8 @@ import { Input } from "@/components/ui/input";
 export function DeleteWorkflowDialog({
   open,
   setOpen,
-  workflowName,
   workflowId,
+  workflowName,
 }) {
   const [confirmText, setConfirmText] = useState("");
   const toastId = `delete-workflow-${workflowId}`;

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Coins, MoveDown } from "lucide-react";
 import { datesToDurationString } from "@/lib/utils";
 import { getWorkflowExecutions } from "@/actions/workflows/getWorkflowExecutions";
-import { ExecutionStatusIndicator } from "./ExecutionStatusIndicator";
+import { ExecutionStatusIndicator } from "@/components/ExecutionStatusComponents";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,

@@ -7,6 +7,8 @@ import {
 } from "@/components/ui/tooltip";
 
 export function TooltipWrapper({ children, content, side, delay = 0 }) {
+  if (!content) return children;
+
   return (
     <TooltipProvider delayDuration={delay}>
       <Tooltip>
