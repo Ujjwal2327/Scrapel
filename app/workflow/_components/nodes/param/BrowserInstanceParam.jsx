@@ -1,4 +1,4 @@
-export function BrowserInstanceParam({ param, value, updateNodeParamValue }) {
+export function BrowserInstanceParam({ param }) {
   return (
     <p className="text-xs">
       {param.name}

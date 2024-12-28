@@ -2,6 +2,8 @@ import { useCallback } from "react";
 import { useReactFlow } from "@xyflow/react";
 import { TaskParamType } from "@/lib/types";
 import { StringParam } from "./param/StringParam";
+import { NumberParam } from "./param/NumberParam";
+import { SelectParam } from "./param/SelectParam";
 import { BrowserInstanceParam } from "./param/BrowserInstanceParam";
 
 export function NodeParamField({ param, nodeId, disabled }) {
@@ -31,14 +33,26 @@ export function NodeParamField({ param, nodeId, disabled }) {
           disabled={disabled}
         />
       );
-    case TaskParamType.BROWSER_INSTANCE:
+    case TaskParamType.NUMBER:
       return (
-        <BrowserInstanceParam
+        <NumberParam
           param={param}
-          value={""}
+          value={value}
           updateNodeParamValue={updateNodeParamValue}
+          disabled={disabled}
         />
       );
+    case TaskParamType.SELECT:
+      return (
+        <SelectParam
+          param={param}
+          value={value}
+          updateNodeParamValue={updateNodeParamValue}
+          disabled={disabled}
+        />
+      );
+    case TaskParamType.BROWSER_INSTANCE:
+      return <BrowserInstanceParam param={param} />;
     default:
       return (
         <div className="w-full">

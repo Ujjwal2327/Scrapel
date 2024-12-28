@@ -57,7 +57,7 @@ export function ExecutionViewer({ initialData }) {
   const workflowExecution = workflowExecutionQuery.data;
 
   const executionPhaseQuery = useQuery({
-    queryKey: ["phase", selectedPhase],
+    queryKey: ["phase", selectedPhase, workflowExecution?.status],
     enabled: !!selectedPhase,
     queryFn: async () =>
       workflowExecution?.phases.find((phase) => phase.id === selectedPhase), // can become inefficient with a large number of phases
@@ -70,6 +70,8 @@ export function ExecutionViewer({ initialData }) {
 
   const isRunning =
     workflowExecution?.status === WorkflowExecutionStatus.RUNNING;
+  const isPending =
+    workflowExecution?.status === WorkflowExecutionStatus.PENDING;
 
   // runs once on component mount & clears the selectedPhase from sessionStorage
   useEffect(() => {
@@ -78,6 +80,12 @@ export function ExecutionViewer({ initialData }) {
 
   // automatic phase selection logic
   useEffect(() => {
+    if (isPending) {
+      setSelectedPhase(null);
+      sessionStorage.removeItem("selectedPhase");
+      return;
+    }
+
     if (sessionStorage.getItem("selectedPhase")) return;
 
     const phases = workflowExecution?.phases || [];
@@ -90,7 +98,7 @@ export function ExecutionViewer({ initialData }) {
 
     if (phaseToSelect?.id && phaseToSelect.id !== selectedPhase)
       setSelectedPhase(phaseToSelect.id);
-  }, [workflowExecution.phases, isRunning, setSelectedPhase]);
+  }, [workflowExecution.phases, isRunning, isPending, setSelectedPhase]);
 
   return (
     <div className="flex w-full h-full">
@@ -104,7 +112,7 @@ export function ExecutionViewer({ initialData }) {
       />
 
       <div className="flex flex-1 h-full overflow-auto">
-        {isRunning ? (
+        {isRunning || isPending ? (
           <div className="flex items-center flex-col gap-2 justify-center h-full w-full">
             <p className="font-bold text-balance">
               Execution is in progress, please wait...
@@ -226,6 +234,11 @@ function Sidebar({
 
   return (
     <div
+      onClick={() => {
+        // Reset selectedPhase on any sidebar click if execution is not running
+        if (isRunning) return;
+        setSelectedPhase(null);
+      }}
       className={cn(
         "max-h-full overflow-y-auto",
         open ? "border-r-2" : "overflow-hidden h-10 w-10 absolute"
@@ -233,7 +246,10 @@ function Sidebar({
     >
       <TooltipWrapper content="Toggle menu" side="right" delay={700}>
         <Button
-          onClick={() => setOpen((prev) => !prev)}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent resetting `selectedPhase`
+            setOpen((prev) => !prev);
+          }}
           variant="ghost"
           size="icon"
           className="self-start"
@@ -270,7 +286,8 @@ function Sidebar({
           {workflowExecution?.phases.map((phase, index) => (
             <Button
               key={phase.id}
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent resetting `selectedPhase`
                 if (isRunning) return;
                 setSelectedPhase(phase.id);
                 sessionStorage.setItem("selectedPhase", phase.id);
@@ -346,12 +363,8 @@ function ParameterViewer({ title, subtitle, paramsJson, forOutputs }) {
                 <p className="text-sm text-muted-foreground sm:flex-1 sm:basis-1/3">
                   {key}
                 </p>
-                <div className="flex justify-center items-center">
-                  <Input
-                    value={value}
-                    readOnly
-                    className="sm:flex-1 sm:basis-2/3 text-sm"
-                  />
+                <div className="flex justify-center items-center sm:flex-1 sm:basis-2/3 ">
+                  <Input value={value} readOnly className="text-sm" />
                   {forOutputs && (
                     <Button
                       onClick={() => handleCopy(value)}

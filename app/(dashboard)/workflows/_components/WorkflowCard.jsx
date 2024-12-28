@@ -103,24 +103,14 @@ export function WorkflowCard({ workflow }) {
 }
 
 function WorkflowActions({ workflow }) {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
   const { id, name, description } = workflow;
 
-  const handleDialogToggle = (dialogType) => {
-    switch (dialogType) {
-      case "delete":
-        setShowDeleteDialog((prev) => !prev);
-        break;
-      case "duplicate":
-        setShowDuplicateDialog((prev) => !prev);
-        break;
-    }
-  };
-
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm" className="p-0">
             <TooltipWrapper content="More actions">
@@ -135,14 +125,20 @@ function WorkflowActions({ workflow }) {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onSelect={() => handleDialogToggle("delete")}
+            onSelect={() => {
+              setDropdownOpen(false);
+              setShowDeleteDialog(true);
+            }}
             className="text-destructive focus:text-destructive/90 space-x-2"
           >
             <Trash size={16} /> Delete
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            onSelect={() => handleDialogToggle("duplicate")}
+            onSelect={() => {
+              setDropdownOpen(false);
+              setShowDuplicateDialog(true);
+            }}
             className="space-x-2"
           >
             <Copy size={16} /> Duplicate

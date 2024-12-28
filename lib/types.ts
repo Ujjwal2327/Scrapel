@@ -24,21 +24,35 @@ export enum ExecutionPhaseStatus {
 }
 
 export enum TaskType {
+  CLICK_ELEMENT = "CLICK_ELEMENT",
+  DELIVER_VIA_WEBHOOK = "DELIVER_VIA_WEBHOOK",
+  EXTRACT_TEXT_FROM_ELEMENT = "EXTRACT_TEXT_FROM_ELEMENT",
+  FILL_INPUT = "FILL_INPUT",
   LAUNCH_BROWSER = "LAUNCH_BROWSER",
   PAGE_TO_HTML = "PAGE_TO_HTML",
-  EXTRACT_TEXT_FROM_ELEMENT = "EXTRACT_TEXT_FROM_ELEMENT",
+  WAIT_FOR_ELEMENT = "WAIT_FOR_ELEMENT",
 }
 
 export enum TaskParamType {
   STRING = "STRING",
+  NUMBER = "NUMBER",
+  SELECT = "SELECT",
   BROWSER_INSTANCE = "BROWSER_INSTANCE",
 }
 
 export enum TaskParamName {
+  Body = "Body",
   ExtractedText = "Extracted text",
   Html = "Html",
   Selector = "Selector",
+  TargetUrl = "Target Url",
+  Value = "Value",
   WebsiteUrl = "Website Url",
+
+  Timeout = "Timeout (in ms)",
+
+  Visibility = "Visibility",
+
   WebPage = "Web page",
 }
 
