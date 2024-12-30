@@ -11,7 +11,7 @@ export async function duplicateWorkflow(form) {
     async () => {
       const { success, data } = duplicateWorkflowSchema.safeParse(form);
       if (!success)
-        throw new UserError("Invalid form data. Please check your input.");
+        throw new UserError("Invalid form data. Please check your inputs.");
 
       const { userId } = await auth();
       if (!userId)

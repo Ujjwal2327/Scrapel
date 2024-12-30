@@ -4,25 +4,25 @@ import prisma from "@/lib/prisma";
 import { UserError } from "@/lib/errors";
 import { withErrorHandling } from "@/lib/withErrorHandling";
 
-export async function getUserWorkflows() {
+export async function getUserCredentials() {
   return withErrorHandling(
     async () => {
       const { userId } = await auth();
       if (!userId)
         throw new UserError("Authentication required. Please log in.");
 
-      const workflows = await prisma.workflow.findMany({
+      const credentials = await prisma.credential.findMany({
         where: {
           userId,
         },
         orderBy: {
-          updatedAt: "desc",
+          name: "asc",
         },
       });
 
-      return workflows;
+      return credentials;
     },
-    "getUserWorkflows",
-    "fetch workflows"
+    "getUserCredentials",
+    "fetch credentials"
   );
 }

@@ -1,15 +1,15 @@
 "use client";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Layers2, Loader2 } from "lucide-react";
-import { duplicateWorkflowSchema } from "@/schemas/workflows";
-import { duplicateWorkflow } from "@/actions/workflows/duplicateWorkflow";
+import { Loader2, ShieldEllipsis } from "lucide-react";
+import { createCredentialSchema } from "@/schemas/credential";
+import { createCredential } from "@/actions/credentials/createCredential";
 import { CustomDialogHeader } from "@/components/CustomDialogHeader";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -22,28 +22,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-export function DuplicateWorkflowDialog({
-  open,
-  setOpen,
-  workflowId,
-  workflowName,
-  workflowDescription,
-}) {
-  const toastId = "duplicate-workflow";
+export function CreateCredentialDialog({ triggerText = "Create credential" }) {
+  const [open, setOpen] = useState(false);
+  const toastId = "create-credential";
 
   const form = useForm({
-    resolver: zodResolver(duplicateWorkflowSchema),
+    resolver: zodResolver(createCredentialSchema),
     defaultValues: {
-      name: `${workflowName} copy`,
-      description: workflowDescription,
-      workflowId,
+      name: "",
+      value: "",
     },
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: duplicateWorkflow,
+    mutationFn: createCredential,
     onSuccess: () => {
-      toast.success("Workflow duplicated.", { id: toastId });
+      toast.success("Credential created.", { id: toastId });
       form.reset();
       setOpen((prev) => !prev);
     },
@@ -54,7 +48,7 @@ export function DuplicateWorkflowDialog({
 
   const onSubmit = useCallback(
     (form) => {
-      toast.loading("Duplicating workflow...", { id: toastId });
+      toast.loading("Creating credential...", { id: toastId });
       mutate(form);
     },
     [mutate]
@@ -68,8 +62,11 @@ export function DuplicateWorkflowDialog({
         setOpen(open);
       }}
     >
+      <DialogTrigger asChild>
+        <Button>{triggerText}</Button>
+      </DialogTrigger>
       <DialogContent className="px-0">
-        <CustomDialogHeader icon={Layers2} title="Duplicate workflow" />
+        <CustomDialogHeader icon={ShieldEllipsis} title="Create credential" />
         <div className="p-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -87,6 +84,8 @@ export function DuplicateWorkflowDialog({
                     </FormControl>
                     <FormDescription>
                       Choose a descriptive and unique name.
+                      <br />
+                      This name will be used to identify the credential.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -94,23 +93,20 @@ export function DuplicateWorkflowDialog({
               />
               <FormField
                 control={form.control}
-                name="description"
+                name="value"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="flex items-center gap-1">
-                      Description
-                      <span className="text-xs text-muted-foreground">
-                        (optional)
-                      </span>
+                      Value
+                      <span className="text-xs text-primary">(required)</span>
                     </FormLabel>
                     <FormControl>
                       <Textarea {...field} className="resize-none" />
                     </FormControl>
                     <FormDescription>
-                      Provide a brief description of what your workflow does.
+                      Provide the value associated with this credential.
                       <br />
-                      This is optional but can help you remember the
-                      workflow&apos;s purpose.
+                      This value will be securely encrypted and stored.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

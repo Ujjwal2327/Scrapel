@@ -13,7 +13,7 @@ export async function createWorkflow(form) {
     async () => {
       const { success, data } = createWorkflowSchema.safeParse(form);
       if (!success)
-        throw new UserError("Invalid form data. Please check your input.");
+        throw new UserError("Invalid form data. Please check your inputs.");
 
       const { userId } = await auth();
       if (!userId)
