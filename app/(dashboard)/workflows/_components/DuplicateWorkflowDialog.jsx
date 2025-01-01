@@ -45,7 +45,7 @@ export function DuplicateWorkflowDialog({
     onSuccess: () => {
       toast.success("Workflow duplicated.", { id: toastId });
       form.reset();
-      setOpen((prev) => !prev);
+      setOpen(false);
     },
     onError: (error) => {
       toast.error(error.message, { id: toastId });

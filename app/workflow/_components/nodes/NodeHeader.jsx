@@ -36,14 +36,19 @@ export function NodeHeader({ taskType, nodeId }) {
                   const node = getNode(nodeId);
                   const newX = node.position.x + 100;
                   const newY = node.position.y + 100;
-                  const newNode = createFlowNode(node.data.type, {
-                    x: newX,
-                    y: newY,
-                  });
+                  const newNode = createFlowNode(
+                    node.data.type,
+                    {
+                      x: newX,
+                      y: newY,
+                    },
+                    node.data.inputs
+                  );
                   node.selected = false;
                   newNode.selected = true;
                   updateNode(nodeId);
                   addNodes(newNode);
+                  console.log({ newNode, node });
                 }}
                 variant="ghost"
                 size="icon"

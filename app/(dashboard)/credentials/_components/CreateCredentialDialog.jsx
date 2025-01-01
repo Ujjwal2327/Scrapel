@@ -39,7 +39,7 @@ export function CreateCredentialDialog({ triggerText = "Create credential" }) {
     onSuccess: () => {
       toast.success("Credential created.", { id: toastId });
       form.reset();
-      setOpen((prev) => !prev);
+      setOpen(false);
     },
     onError: (error) => {
       toast.error(error.message, { id: toastId });

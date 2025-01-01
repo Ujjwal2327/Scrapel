@@ -15,7 +15,7 @@ export function StringParam({ param, value, updateNodeParamValue, disabled }) {
   const Component = param.variant === "textarea" ? Textarea : Input;
 
   return (
-    <div className="space-y-1 p-1 w-full">
+    <div className="space-y-1 w-full">
       <Label htmlFor={id} className="text-xs flex gap-x-2 flex-wrap">
         {param.name}
         {param.required && <span className="text-red-400">*</span>}
@@ -27,7 +27,11 @@ export function StringParam({ param, value, updateNodeParamValue, disabled }) {
         onBlur={(e) => updateNodeParamValue(e.target.value)}
         disabled={disabled}
         placeholder={
-          disabled ? "Value added automatically" : "Enter value here"
+          disabled
+            ? "Value added automatically"
+            : param.placeholder
+            ? param.placeholder
+            : "Enter value here"
         }
         className={cn(
           "text-xs h-auto bg-background",

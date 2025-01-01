@@ -1,3 +1,5 @@
+import "server-only";
+export const dynamic = "force-dynamic";
 import parser from "cron-parser";
 import { timingSafeEqual } from "crypto";
 import prisma from "@/lib/prisma";

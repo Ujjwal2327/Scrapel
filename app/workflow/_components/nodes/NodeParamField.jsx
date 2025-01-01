@@ -4,6 +4,7 @@ import { TaskParamType } from "@/lib/types";
 import { StringParam } from "./param/StringParam";
 import { NumberParam } from "./param/NumberParam";
 import { SelectParam } from "./param/SelectParam";
+import { CredentialParam } from "./param/CredentialParam";
 import { BrowserInstanceParam } from "./param/BrowserInstanceParam";
 
 export function NodeParamField({ param, nodeId, disabled }) {
@@ -45,6 +46,15 @@ export function NodeParamField({ param, nodeId, disabled }) {
     case TaskParamType.SELECT:
       return (
         <SelectParam
+          param={param}
+          value={value}
+          updateNodeParamValue={updateNodeParamValue}
+          disabled={disabled}
+        />
+      );
+    case TaskParamType.CREDENTIAL:
+      return (
+        <CredentialParam
           param={param}
           value={value}
           updateNodeParamValue={updateNodeParamValue}

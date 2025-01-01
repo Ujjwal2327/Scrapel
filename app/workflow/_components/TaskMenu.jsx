@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { PanelLeft } from "lucide-react";
+import { Coins, PanelLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TaskType } from "@/lib/types";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
+import { TooltipWrapper } from "@/components/TooltipWrapper";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -10,7 +11,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { TooltipWrapper } from "@/components/TooltipWrapper";
+import { Badge } from "@/components/ui/badge";
 
 export function TaskMenu() {
   const [open, setOpen] = useState(true);
@@ -36,13 +37,19 @@ export function TaskMenu() {
         className={cn(
           "transition-all duration-300 ease-in-out",
           open
-            ? "w-full h-full sm:w-80 sm:h-full opacity-100 pb-10 overflow-y-auto py-2 px-4"
+            ? "w-full h-full sm:w-90 sm:h-full opacity-100 pb-10 overflow-y-auto py-2 px-4"
             : "w-full h-0 sm:w-0 sm:h-full opacity-0"
         )}
       >
         <Accordion
           type="multiple"
-          defaultValue={["interaction", "extraction", "timing", "result"]}
+          defaultValue={[
+            "interaction",
+            "extraction",
+            "storage",
+            "timing",
+            "result",
+          ]}
           className="w-full"
         >
           <AccordionItem value="interaction">
@@ -50,8 +57,10 @@ export function TaskMenu() {
               User Interactions
             </AccordionTrigger>
             <AccordionContent className="flex flex-col gap-1">
-              <TaskMenuButton taskType={TaskType.FILL_INPUT} />
               <TaskMenuButton taskType={TaskType.CLICK_ELEMENT} />
+              <TaskMenuButton taskType={TaskType.FILL_INPUT} />
+              <TaskMenuButton taskType={TaskType.NAVIGATE_URL} />
+              <TaskMenuButton taskType={TaskType.SCROLL_TO_ELEMENT} />
             </AccordionContent>
           </AccordionItem>
 
@@ -60,8 +69,19 @@ export function TaskMenu() {
               Data Extraction
             </AccordionTrigger>
             <AccordionContent className="flex flex-col gap-1">
-              <TaskMenuButton taskType={TaskType.PAGE_TO_HTML} />
+              <TaskMenuButton taskType={TaskType.EXTRACT_DATA_WITH_AI} />
               <TaskMenuButton taskType={TaskType.EXTRACT_TEXT_FROM_ELEMENT} />
+              <TaskMenuButton taskType={TaskType.PAGE_TO_HTML} />
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="storage">
+            <AccordionTrigger className="font-bold">
+              Data storage
+            </AccordionTrigger>
+            <AccordionContent className="flex flex-col gap-1">
+              <TaskMenuButton taskType={TaskType.ADD_PROPERTY_TO_JSON} />
+              <TaskMenuButton taskType={TaskType.READ_PROPERTY_FROM_JSON} />
             </AccordionContent>
           </AccordionItem>
 
@@ -103,8 +123,14 @@ function TaskMenuButton({ taskType }) {
       variant="secondary"
       className="flex justify-between items-center gap-2 border w-full"
     >
-      <task.icon size={20} />
-      {task.label}
+      <div className="flex gap-2">
+        <task.icon size={20} />
+        {task.label}
+      </div>
+      <Badge variant="outline" size="sm" className="flex gap-2 items-center">
+        <Coins size={16} />
+        {task.credits}
+      </Badge>
     </Button>
   );
 }
