@@ -2,10 +2,14 @@ import { cn } from "@/lib/utils";
 import { SendToBack } from "lucide-react";
 import Link from "next/link";
 
-export function Logo({ fontSize = "text-2xl", iconSize = 20 }) {
+export function Logo({
+  href = "/workflows",
+  fontSize = "text-2xl",
+  iconSize = 20,
+}) {
   return (
     <Link
-      href="/"
+      href={href}
       className={cn(
         "text-2xl font-extrabold flex items-center gap-2 select-none",
         fontSize

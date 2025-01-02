@@ -6,6 +6,7 @@ import { CreateWorkflowDialog } from "./_components/CreateWorkflowDialog";
 import { WorkflowCard } from "./_components/WorkflowCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorAlert } from "@/components/ErrorAlert";
+import { waitFor } from "@/lib/utils";
 
 export default function WorkflowsPage() {
   return (
@@ -28,15 +29,16 @@ export default function WorkflowsPage() {
 
 function UserWorkflowsSkeleton() {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 rounded-lg">
       {[1, 2, 3, 4].map((i) => (
-        <Skeleton key={i} className="h-24" />
+        <Skeleton key={i} className="h-[100px]" />
       ))}
     </div>
   );
 }
 
 async function UserWorkflows() {
+  await waitFor(5000);
   const workflows = await getUserWorkflows().catch((error) => ({
     errorMessage: error.message,
   }));

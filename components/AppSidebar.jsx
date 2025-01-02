@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Coins, Home, Layers2, ShieldCheck } from "lucide-react";
+import { ChartNoAxesCombined, Coins, Layers2, ShieldCheck } from "lucide-react";
 import { Logo } from "./Logo";
 import { UserAvailableCreditsBadge } from "./UserAvailableCreditsBadge";
 import {
@@ -19,11 +19,6 @@ import {
 // Menu items.
 const items = [
   {
-    title: "Home",
-    url: "",
-    icon: Home,
-  },
-  {
     title: "Workflows",
     url: "workflows",
     icon: Layers2,
@@ -32,6 +27,11 @@ const items = [
     title: "Credentials",
     url: "credentials",
     icon: ShieldCheck,
+  },
+  {
+    title: "Dashboard ",
+    url: "dashboard",
+    icon: ChartNoAxesCombined,
   },
   {
     title: "Billing",
@@ -52,7 +52,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup className="space-y-7">
           <SidebarGroupLabel className="flex justify-center">
-            <Logo />
+            <Logo href="/" />
           </SidebarGroupLabel>
           <SidebarGroupLabel>
             <UserAvailableCreditsBadge />

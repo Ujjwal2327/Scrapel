@@ -40,7 +40,7 @@ function UserCredentialsSkeleton() {
   return (
     <div className="space-y-2">
       {[1, 2, 3, 4].map((i) => (
-        <Skeleton key={i} className="h-20" />
+        <Skeleton key={i} className="h-[74px]" />
       ))}
     </div>
   );

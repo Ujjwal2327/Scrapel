@@ -192,9 +192,9 @@ function LastRunDetails({ workflow, isDraft }) {
   const formattedStartedAt =
     lastRunAt && formatDistanceToNow(lastRunAt, { addSuffix: true });
 
-  const nextSchedule = nextRunAt && format(nextRunAt, "dd-MM-yyyy HH-mm-ss");
+  const nextSchedule = nextRunAt && format(nextRunAt, "dd-MM-yyyy HH:mm:ss");
   const nextScheduleUTC =
-    nextRunAt && formatInTimeZone(nextRunAt, "UTC", "HH-mm");
+    nextRunAt && formatInTimeZone(nextRunAt, "UTC", "HH:mm");
 
   return (
     <div className="bg-primary/5 px-4 py-1 flex flex-wrap gap-x-6 gap-y-2 justify-between items-center text-muted-foreground">
