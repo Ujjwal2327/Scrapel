@@ -35,7 +35,7 @@ const items = [
   },
   {
     title: "Billing",
-    url: "biling",
+    url: "billing",
     icon: Coins,
   },
 ];

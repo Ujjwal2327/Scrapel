@@ -68,6 +68,7 @@ export function StatsBarChart({
             {Object.keys(chartConfig).map((key, index) => {
               const isFirstBar = index === 0;
               const isLastBar = index === Object.keys(chartConfig).length - 1;
+
               return (
                 <Bar
                   key={key}

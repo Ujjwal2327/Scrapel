@@ -1,25 +1,31 @@
 "use server";
+import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import { UserError } from "@/lib/errors";
 import { withErrorHandling } from "@/lib/withErrorHandling";
 
-export async function getAvailableCredits() {
+export async function setupUser() {
   return withErrorHandling(
     async () => {
       const { userId } = await auth();
       if (!userId)
         throw new UserError("Authentication required. Please log in.");
 
-      const userBalance = await prisma.userBalance.findUniqueOrThrow({
+      await prisma.userBalance.upsert({
         where: {
           userId,
         },
+        update: {},
+        create: {
+          userId,
+          credits: 250,
+        },
       });
 
-      return userBalance.credits;
+      redirect("/workflows");
     },
-    "getAvailableCredits",
-    "fetch available credits"
+    "setupUser",
+    "setup your account"
   );
 }

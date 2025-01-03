@@ -1,6 +1,6 @@
 "use client";
-import CountUp from "react-countup";
 import { CirclePlay, Coins, Waypoints } from "lucide-react";
+import { ReactCountUpWrapper } from "@/components/ReactCountUpWrapper";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function StatsCards({
@@ -41,7 +41,7 @@ function StatsCard({ title, value, icon: Icon }) {
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold text-primary">
-          <CountUp duration={0.5} preserveValue end={value} decimal={0} />
+          <ReactCountUpWrapper value={value} />
         </div>
       </CardContent>
     </Card>

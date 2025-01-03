@@ -6,7 +6,6 @@ import { CreateWorkflowDialog } from "./_components/CreateWorkflowDialog";
 import { WorkflowCard } from "./_components/WorkflowCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorAlert } from "@/components/ErrorAlert";
-import { waitFor } from "@/lib/utils";
 
 export default function WorkflowsPage() {
   return (
@@ -38,7 +37,6 @@ function UserWorkflowsSkeleton() {
 }
 
 async function UserWorkflows() {
-  await waitFor(5000);
   const workflows = await getUserWorkflows().catch((error) => ({
     errorMessage: error.message,
   }));

@@ -1,6 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { MONTH_NAMES } from "@/lib/constants";
+import { Months } from "@/lib/constants";
 import {
   Select,
   SelectContent,
@@ -29,7 +29,7 @@ export function PeriodSelector({ periods, selectedPeriod }) {
       <SelectContent>
         {periods.map((period, index) => (
           <SelectItem key={index} value={`${period.month}-${period.year}`}>
-            {MONTH_NAMES[period.month]} {period.year}
+            {Months[period.month]} {period.year}
           </SelectItem>
         ))}
       </SelectContent>

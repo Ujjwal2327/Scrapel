@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { Shield, ShieldOff } from "lucide-react";
-import { waitFor } from "@/lib/utils";
 import { getUserCredentials } from "@/actions/credentials/getUserCredentials";
 import { CreateCredentialDialog } from "./_components/CreateCredentialDialog";
 import { CredentialCard } from "./_components/CredentialCard";
@@ -47,7 +46,6 @@ function UserCredentialsSkeleton() {
 }
 
 async function UserCredentials() {
-  await waitFor(6000);
   const credentials = await getUserCredentials().catch((error) => ({
     errorMessage: error.message,
   }));

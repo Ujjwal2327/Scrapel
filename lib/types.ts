@@ -78,3 +78,9 @@ export enum FlowToExecutionPlanError {
   INVALID_INPUTS = "INVALID INPUTS",
   UNEXPECTED = "UNEXPECTED",
 }
+
+export enum PackId {
+  SMALL = "SMALL",
+  MEDIUM = "MEDIUM",
+  LARGE = "LARGE",
+}
