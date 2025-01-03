@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { Suspense } from "react";
 import { Coins } from "lucide-react";
 import { getAvailableCredits } from "@/actions/billing/getAvailableCredits";

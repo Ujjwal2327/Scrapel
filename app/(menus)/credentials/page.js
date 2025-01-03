@@ -1,9 +1,11 @@
+export const dynamic = "force-dynamic";
 import { Suspense } from "react";
 import { Shield, ShieldOff } from "lucide-react";
 import { getUserCredentials } from "@/actions/credentials/getUserCredentials";
 import { CreateCredentialDialog } from "./_components/CreateCredentialDialog";
 import { CredentialCard } from "./_components/CredentialCard";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { ErrorAlert } from "@/components/ErrorAlert";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CredentialsPage() {

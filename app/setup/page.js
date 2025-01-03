@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { setupUser } from "@/actions/user/setupUser";
 import { ErrorAlert } from "@/components/ErrorAlert";
 import { Logo } from "@/components/Logo";
