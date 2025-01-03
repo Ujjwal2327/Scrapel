@@ -72,21 +72,17 @@ export function ExecutionViewer({ initialData }) {
     workflowExecution?.status === WorkflowExecutionStatus.RUNNING;
   const isPending =
     workflowExecution?.status === WorkflowExecutionStatus.PENDING;
+  const isSelectedPhaseCompleted =
+    executionPhase?.status === ExecutionPhaseStatus.COMPLETED ||
+    executionPhase?.status === ExecutionPhaseStatus.FAILED;
 
-  // runs once on component mount & clears the selectedPhase from sessionStorage
-  useEffect(() => {
-    sessionStorage.removeItem("selectedPhase");
-  }, []);
-
-  // automatic phase selection logic
+  // runs once on component mount
   useEffect(() => {
     if (isPending) {
       setSelectedPhase(null);
       sessionStorage.removeItem("selectedPhase");
       return;
     }
-
-    if (sessionStorage.getItem("selectedPhase")) return;
 
     const phases = workflowExecution?.phases || [];
     if (!phases.length) return;
@@ -98,7 +94,32 @@ export function ExecutionViewer({ initialData }) {
 
     if (phaseToSelect?.id && phaseToSelect.id !== selectedPhase)
       setSelectedPhase(phaseToSelect.id);
-  }, [workflowExecution.phases, isRunning, isPending, setSelectedPhase]);
+  }, []);
+
+  // automatic phase selection logic
+  useEffect(() => {
+    if (isPending) {
+      setSelectedPhase(null);
+      sessionStorage.removeItem("selectedPhase");
+      return;
+    }
+
+    if (!selectedPhase) {
+      sessionStorage.removeItem("selectedPhase");
+      if (!isRunning) return;
+    } else if (sessionStorage.getItem("selectedPhase")) return;
+
+    const phases = workflowExecution?.phases || [];
+    if (!phases.length) return;
+
+    const phaseToSelect = isRunning
+      ? phases.find((phase) => phase.status === ExecutionPhaseStatus.RUNNING)
+      : phases.find((phase) => phase.status === ExecutionPhaseStatus.FAILED) ||
+        phases.at(-1);
+
+    if (phaseToSelect?.id && phaseToSelect.id !== selectedPhase)
+      setSelectedPhase(phaseToSelect.id);
+  }, [workflowExecution, selectedPhase]);
 
   return (
     <div className="flex w-full h-full">
@@ -106,33 +127,18 @@ export function ExecutionViewer({ initialData }) {
         workflowExecution={workflowExecution}
         selectedPhase={selectedPhase}
         setSelectedPhase={setSelectedPhase}
-        isRunning={isRunning}
         open={open}
         setOpen={setOpen}
       />
 
       <div className="flex flex-1 h-full overflow-auto">
-        {isRunning || isPending ? (
-          <div className="flex items-center flex-col gap-2 justify-center h-full w-full">
-            <p className="font-bold text-balance">
-              Execution is in progress, please wait...
-            </p>
-          </div>
-        ) : !selectedPhase ? (
-          <div className="flex items-center flex-col gap-2 justify-center h-full w-full">
-            <div className="flex flex-col gap-1 text-center">
-              <p className="font-bold">No phase selected</p>
-              <p className="font-sm text-muted-foreground">
-                Select a phase to view details
-              </p>
-            </div>
-          </div>
-        ) : executionPhaseQuery.isLoading ? (
-          <div className="flex items-center justify-center h-full w-full">
-            <p>Loading phase details...</p>
-          </div>
-        ) : (
-          executionPhase && (
+        {
+          // executionPhaseQuery.isLoading ? (
+          // <div className="flex items-center justify-center h-full w-full">
+          //   <p>Loading phase details...</p>
+          // </div>
+          // ) :
+          executionPhase && isSelectedPhaseCompleted ? (
             <div className="flex flex-col py-4 container gap-4 overflow-auto">
               <div className="flex gap-2 items-center flex-wrap">
                 <Badge variant="outline" className="space-x-4">
@@ -171,8 +177,25 @@ export function ExecutionViewer({ initialData }) {
 
               <LogViewer logs={executionPhase.logs} />
             </div>
+          ) : isRunning || isPending ? (
+            <div className="flex items-center flex-col gap-2 justify-center h-full w-full">
+              <p className="font-bold text-balance">
+                Run is in progress, please wait...
+              </p>
+            </div>
+          ) : (
+            !selectedPhase && (
+              <div className="flex items-center flex-col gap-2 justify-center h-full w-full">
+                <div className="flex flex-col gap-1 text-center">
+                  <p className="font-bold">No phase selected</p>
+                  <p className="font-sm text-muted-foreground">
+                    Select a phase to view details
+                  </p>
+                </div>
+              </div>
+            )
           )
-        )}
+        }
       </div>
     </div>
   );
@@ -182,7 +205,6 @@ function Sidebar({
   workflowExecution,
   selectedPhase,
   setSelectedPhase,
-  isRunning,
   open,
   setOpen,
 }) {
@@ -234,11 +256,8 @@ function Sidebar({
 
   return (
     <div
-      onClick={() => {
-        // Reset selectedPhase on any sidebar click if execution is not running
-        if (isRunning) return;
-        setSelectedPhase(null);
-      }}
+      // Reset selectedPhase on any sidebar click
+      onClick={() => setSelectedPhase(null)}
       className={cn(
         "max-h-full overflow-y-auto",
         open ? "border-r-2" : "overflow-hidden h-10 w-10 absolute"
@@ -283,30 +302,39 @@ function Sidebar({
         <Separator />
 
         <div className="overflow-auto px-2 py-4">
-          {workflowExecution?.phases.map((phase, index) => (
-            <Button
-              key={phase.id}
-              onClick={(e) => {
-                e.stopPropagation(); // Prevent resetting `selectedPhase`
-                if (isRunning) return;
-                setSelectedPhase(phase.id);
-                sessionStorage.setItem("selectedPhase", phase.id);
-              }}
-              variant={selectedPhase === phase.id ? "secondary" : "ghost"}
-              className={cn(
-                "w-full justify-between",
-                isRunning && "cursor-default"
-              )}
-            >
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="px-1.5">
-                  {index + 1}
-                </Badge>
-                <p className="font-semibold">{phase.name}</p>
-              </div>
-              <PhaseStatusBadge status={phase.status} />
-            </Button>
-          ))}
+          {workflowExecution?.phases.map((phase, index) => {
+            const isPhaseCompleted =
+              phase?.status === ExecutionPhaseStatus.COMPLETED ||
+              phase?.status === ExecutionPhaseStatus.FAILED;
+
+            return (
+              <Button
+                key={phase.id}
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent resetting `selectedPhase`
+                  if (!isPhaseCompleted) {
+                    setSelectedPhase(null);
+                    return;
+                  }
+                  setSelectedPhase(phase.id);
+                  sessionStorage.setItem("selectedPhase", phase.id);
+                }}
+                variant={selectedPhase === phase.id ? "secondary" : "ghost"}
+                className={cn(
+                  "w-full justify-between",
+                  !isPhaseCompleted && "cursor-default"
+                )}
+              >
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="px-1.5">
+                    {index + 1}
+                  </Badge>
+                  <p className="font-semibold">{phase.name}</p>
+                </div>
+                <PhaseStatusBadge status={phase.status} />
+              </Button>
+            );
+          })}
         </div>
       </aside>
     </div>

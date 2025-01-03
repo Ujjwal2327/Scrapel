@@ -23,16 +23,19 @@ export async function getPeriods() {
       const currentDate = new Date();
       const currentMonth = currentDate.getMonth();
       const currentYear = currentDate.getFullYear();
-      const earliestYear = earliestExecution._min.startedAt
-        ? earliestExecution._min.startedAt.getFullYear()
-        : currentYear;
+
+      const earliestStartedAt = earliestExecution._min.startedAt || new Date();
+      const earliestMonth = earliestStartedAt.getMonth();
+      const earliestYear = earliestStartedAt.getFullYear();
 
       const periods = [];
-      for (let year = earliestYear; year < currentYear; year++) {
-        for (let month = 0; month <= 11; month++) periods.push({ year, month });
+      for (let year = earliestYear; year <= currentYear; year++) {
+        const startMonth = year === earliestYear ? earliestMonth : 0;
+        const endMonth = year === currentYear ? currentMonth : 11;
+
+        for (let month = startMonth; month <= endMonth; month++)
+          periods.push({ year, month });
       }
-      for (let month = 0; month <= currentMonth; month++)
-        periods.push({ year: currentYear, month });
 
       return periods;
     },

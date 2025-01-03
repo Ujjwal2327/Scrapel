@@ -8,7 +8,6 @@ import { flowToExecutionPlan } from "@/lib/workflow/flowToExecutionPlan";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
 import { executeWorkflow } from "@/lib/workflow/executeWorkflow";
 import {
-  ExecutionPhaseStatus,
   WorkflowExecutionStatus,
   WorkflowExecutionTrigger,
   WorkflowStatus,
@@ -73,7 +72,6 @@ export async function runWorkflow({ id, definition = null }) {
               return nodes.flatMap((node) => {
                 return {
                   userId,
-                  status: ExecutionPhaseStatus.CREATED,
                   number: phase,
                   node: JSON.stringify(node),
                   name: TaskRegistry[node.data.type].label,

@@ -56,7 +56,7 @@ export function CredentialParam({
               <ErrorAlert message={error.message} />
             ) : credentials ? (
               credentials.length ? (
-                <ScrollArea className="h-36 p-0">
+                <ScrollArea className="max-h-36 p-0">
                   {!param.required && (
                     <SelectItem
                       value={undefined}

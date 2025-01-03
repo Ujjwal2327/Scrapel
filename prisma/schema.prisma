@@ -24,7 +24,7 @@ model Workflow {
   executionPlan String?
   creditsCost   Int                 @default(0)
   status        WorkflowStatus      @default(DRAFT)
-  cron          String? //
+  cron          String? //eg. * * * * *
   lastRunId     String?
   lastRunStatus String?
   lastRunAt     DateTime?
@@ -75,7 +75,7 @@ enum ExecutionPhaseStatus {
 model ExecutionPhase {
   id                  String               @id @default(cuid())
   userId              String
-  status              ExecutionPhaseStatus
+  status              ExecutionPhaseStatus @default(CREATED)
   number              Int
   node                String
   name                String

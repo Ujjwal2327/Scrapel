@@ -6,7 +6,7 @@ import { UserError } from "@/lib/errors";
 import { withErrorHandling } from "@/lib/withErrorHandling";
 import { duplicateWorkflowSchema } from "@/schemas/workflows";
 
-export async function duplicateWorkflow(form) {
+export async function renameWorkflow(form) {
   return withErrorHandling(
     async () => {
       const { success, data } = duplicateWorkflowSchema.safeParse(form);
@@ -19,24 +19,19 @@ export async function duplicateWorkflow(form) {
 
       const { workflowId, ...workflowData } = data;
 
-      const sourceWorkflow = await prisma.workflow.findUniqueOrThrow({
+      await prisma.workflow.update({
         where: {
           id: workflowId,
           userId,
         },
-      });
-
-      await prisma.workflow.create({
         data: {
-          userId,
-          definition: sourceWorkflow.definition,
           ...workflowData,
         },
       });
 
       revalidatePath(`/workflows`);
     },
-    "duplicateWorkflow",
-    "duplicate workflow"
+    "renameWorkflow",
+    "rename workflow"
   );
 }

@@ -11,15 +11,11 @@ export function StatsCards({
   return (
     <div className="grid gap-3 lg:gap-8 lg:grid-cols-3">
       <StatsCard
-        title="Workflow Executions"
+        title="Workflow Runs"
         value={workflowExecutions}
         icon={CirclePlay}
       />
-      <StatsCard
-        title="Phase Executions"
-        value={phaseExecutions}
-        icon={Waypoints}
-      />
+      <StatsCard title="Phase Runs" value={phaseExecutions} icon={Waypoints} />
       <StatsCard
         title="Credits Consumed"
         value={creditsConsumed}
@@ -41,7 +37,7 @@ function StatsCard({ title, value, icon: Icon }) {
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold text-primary">
-          <ReactCountUpWrapper value={value} />
+          <ReactCountUpWrapper value={value} duration={2} />
         </div>
       </CardContent>
     </Card>

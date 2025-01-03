@@ -25,7 +25,7 @@ export default function WorkflowExecutionHistoryPage({ params }) {
 
 function ExecutionsTableSkeleton() {
   return (
-    <div className="flex h-full w-full items-center justify-center">
+    <div className="flex h-4/5 w-full items-center justify-center overflow-hidden">
       <Loader2 size={30} className="animate-spin stroke-primary" />
     </div>
   );

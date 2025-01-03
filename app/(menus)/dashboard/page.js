@@ -13,11 +13,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function HomePage({ searchParams }) {
   const currentDate = new Date();
-  const { month, year } = searchParams;
-  const period = {
-    month: month ? parseInt(month) : currentDate.getMonth(),
-    year: year ? parseInt(year) : currentDate.getFullYear(),
-  };
+
+  let { month, year } = searchParams;
+  month = parseInt(month);
+  year = parseInt(year);
+  if (isNaN(month) || month < 0 || month > 11) month = currentDate.getMonth();
+  if (isNaN(year) || year < 0 || year > 9999) year = currentDate.getFullYear();
+
+  const period = { month, year };
 
   return (
     <div className="flex flex-1 flex-col h-full">
@@ -99,8 +102,8 @@ async function ExecutionStatsWrapper({ selectedPeriod }) {
   return (
     <StatsAreaChart
       icon={<Layers2 />}
-      title="Workflow Execution Statistics"
-      description="A daily breakdown of successful and failed workflow executions."
+      title="Workflow Runs Statistics"
+      description="A daily breakdown of successful and failed workflow runs."
       chartConfig={{
         success: { label: "Success", color: "hsl(var(--chart-1))" },
         failed: { label: "Failed", color: "hsl(var(--chart-2))" },
@@ -125,7 +128,7 @@ async function CreditsConsumedStatsWrapper({ selectedPeriod }) {
     <StatsBarChart
       icon={<ChartColumnStacked />}
       title="Credits Consumption Statistics"
-      description="Daily count of credits used during successful and failed execution phases."
+      description="Daily count of credits used during successful and failed run phases."
       chartConfig={{
         success: {
           label: "Successful Phase Credits",

@@ -12,6 +12,7 @@ import {
   FileText,
   MoreVertical,
   MoveRight,
+  Pencil,
   Play,
   Shuffle,
   Trash,
@@ -20,6 +21,7 @@ import { WorkflowStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { DeleteWorkflowDialog } from "./DeleteWorkflowDialog";
 import { DuplicateWorkflowDialog } from "./DuplicateWorkflowDialog";
+import { RenameWorkflowDialog } from "./RenameWorkflowDialog";
 import { ExecutePublishedWorkflowButton } from "./ExecutePublishedWorkflowButton";
 import { SchedulerDialog } from "./SchedulerDialog";
 import { TooltipWrapper } from "@/components/TooltipWrapper";
@@ -106,6 +108,7 @@ function WorkflowActions({ workflow }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
+  const [showRenameDialog, setShowRenameDialog] = useState(false);
   const { id, name, description } = workflow;
 
   return (
@@ -143,6 +146,16 @@ function WorkflowActions({ workflow }) {
           >
             <Copy size={16} /> Duplicate
           </DropdownMenuItem>
+
+          <DropdownMenuItem
+            onSelect={() => {
+              setDropdownOpen(false);
+              setShowRenameDialog(true);
+            }}
+            className="space-x-2"
+          >
+            <Pencil size={16} /> Rename
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -156,6 +169,14 @@ function WorkflowActions({ workflow }) {
       <DuplicateWorkflowDialog
         open={showDuplicateDialog}
         setOpen={setShowDuplicateDialog}
+        workflowId={id}
+        workflowName={name}
+        workflowDescription={description}
+      />
+
+      <RenameWorkflowDialog
+        open={showRenameDialog}
+        setOpen={setShowRenameDialog}
         workflowId={id}
         workflowName={name}
         workflowDescription={description}

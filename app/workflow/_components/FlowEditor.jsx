@@ -12,7 +12,7 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-// import { toast } from "sonner";
+import { toast } from "sonner";
 import { TaskParamMapping } from "@/lib/workflow/task/taskParamMapping";
 import { createFlowNode } from "@/lib/workflow/createFlowNode";
 import { NodeComponent } from "./nodes/NodeComponent";
@@ -35,7 +35,7 @@ export function FlowEditor({ workflow }) {
       setNodes(flow.nodes || []);
       setEdges(flow.edges || []);
     } catch (error) {
-      // toast.error(`Failed to fetch workflow. Please try again later.`); // getting 2 times
+      toast.error("Invalid workflow");
     }
   }, [workflow.definition, setEdges, setNodes]);
 
@@ -53,6 +53,7 @@ export function FlowEditor({ workflow }) {
 
       const position = screenToFlowPosition({ x: e.clientX, y: e.clientY });
       const newNode = createFlowNode(taskType, position);
+      newNode.selected = true;
       setNodes((nodes) => nodes.concat(newNode));
     },
     [screenToFlowPosition, setNodes]

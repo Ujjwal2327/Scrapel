@@ -8,3 +8,5 @@ export const createWorkflowSchema = z.object({
 export const duplicateWorkflowSchema = createWorkflowSchema.extend({
   workflowId: z.string().trim().min(1, "Workflow id is required"),
 });
+
+export const renameWorkflowSchema = duplicateWorkflowSchema;
