@@ -10,7 +10,7 @@ export const useExecutionPlan = () => {
   const { toObject } = useReactFlow();
   const { setInvalidInputs, clearErrors } = useFlowValidation();
 
-  const handleError = useCallback(
+  const processError = useCallback(
     (error) => {
       const errorMessage = getFlowToExecutionPlanErrorMessage(error.type);
       toast.error(errorMessage);
@@ -28,12 +28,12 @@ export const useExecutionPlan = () => {
     const { nodes, edges } = toObject();
     const { executionPlan, error } = flowToExecutionPlan(nodes, edges);
     if (error) {
-      handleError(error);
+      processError(error);
       return null;
     }
 
     clearErrors(); //  to clear the previous errors
     return executionPlan;
-  }, [toObject, handleError, clearErrors]);
+  }, [toObject, processError, clearErrors]);
   return generateExecutionPlan;
 };
