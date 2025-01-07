@@ -6,7 +6,6 @@ import { UserError } from "@/lib/errors";
 import { withErrorHandling } from "@/lib/withErrorHandling";
 import { flowToExecutionPlan } from "@/lib/workflow/flowToExecutionPlan";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
-import { executeWorkflow } from "@/lib/workflow/executeWorkflow";
 import {
   WorkflowExecutionStatus,
   WorkflowExecutionTrigger,
@@ -16,6 +15,7 @@ import {
   getFlowToExecutionPlanErrorMessage,
   validateExecutionPlan,
 } from "@/lib/utils";
+import { triggerRenderWorker } from "@/actions/render/triggerRenderWorker";
 
 export async function runWorkflow({ id, definition = null }) {
   return withErrorHandling(
@@ -86,7 +86,7 @@ export async function runWorkflow({ id, definition = null }) {
         },
       });
 
-      executeWorkflow(execution.id, id); // run in background
+      triggerRenderWorker(execution.id, id); // run in background
 
       redirect(`/workflow/runs/${id}/${execution.id}`);
     },
