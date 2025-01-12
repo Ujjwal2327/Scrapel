@@ -1,8 +1,11 @@
+"use client";
+import { useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { CircleAlert, Coins, Loader2 } from "lucide-react";
 import { getAvailableCredits } from "@/actions/billing/getAvailableCredits";
 import { ReactCountUpWrapper } from "./ReactCountUpWrapper";
+import { TooltipWrapper } from "./TooltipWrapper";
 import { Button } from "@/components/ui/button";
 
 export function UserAvailableCreditsBadge() {
@@ -13,24 +16,34 @@ export function UserAvailableCreditsBadge() {
     // staleTime: 15 * 1000,
   });
 
-  if (isError) toast.error(error.message);
+  const toastShown = useRef(false);
+
+  if (isError && !toastShown.current) {
+    toast.error(error.message);
+    toastShown.current = true; // Ensure the toast is only shown once
+  }
 
   return (
-    <Button
-      onClick={refetch}
-      variant="outline"
-      className="flex items-center w-full space-x-2"
-    >
-      <Coins size={20} className="stroke-primary" />
-      <span className="font-semibold capitalize text-foreground">
-        {isLoading ? (
-          <Loader2 className="w-4 h-4 animate-spin" />
-        ) : typeof data === "number" && !isNaN(data) ? (
-          <ReactCountUpWrapper value={data} />
-        ) : (
-          <CircleAlert className="stroke-destructive" />
-        )}
-      </span>
-    </Button>
+    <TooltipWrapper content={error?.message} side="bottom">
+      <Button
+        onClick={() => {
+          toastShown.current = false; // Reset when refetching
+          refetch();
+        }}
+        variant="outline"
+        className="flex items-center w-full space-x-2"
+      >
+        <Coins size={20} className="stroke-primary" />
+        <span className="font-semibold capitalize text-foreground">
+          {isLoading ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : !isError && typeof data === "number" && !isNaN(data) ? (
+            <ReactCountUpWrapper value={data} />
+          ) : (
+            <CircleAlert className="stroke-destructive" />
+          )}
+        </span>
+      </Button>
+    </TooltipWrapper>
   );
 }

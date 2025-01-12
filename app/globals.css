@@ -106,3 +106,16 @@ body {
   background-color: var(--default);
   color: white;
 }
+
+/* dynamic screen height for mobile responsiveness */
+.h-screen {
+  height: calc(var(--vh, 1vh) * 100);
+}
+
+.min-h-screen {
+  min-height: calc(var(--vh, 1vh) * 100);
+}
+
+.max-h-screen {
+  max-height: calc(var(--vh, 1vh) * 100);
+}

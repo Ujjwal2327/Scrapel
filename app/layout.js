@@ -1,6 +1,7 @@
-import localFont from "next/font/local";
 import "./globals.css";
+import localFont from "next/font/local";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Analytics } from "@vercel/analytics/react";
 import { AppProviders } from "@/components/providers/AppProviders";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -40,6 +41,7 @@ export default function RootLayout({ children }) {
           <AppProviders>
             {children}
             <Toaster richColors />
+            <Analytics />
           </AppProviders>
         </body>
       </html>
