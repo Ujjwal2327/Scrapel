@@ -23,9 +23,8 @@ export async function GET(request) {
       },
     });
 
-    if (workflows.length === 0) {
+    if (workflows.length === 0)
       return Response.json({ workflowsLength: 0 }, { status: 200 });
-    }
 
     // Trigger workflows in parallel
     await Promise.allSettled(
@@ -46,12 +45,10 @@ async function triggerWorkflow(workflowId) {
   try {
     const API_SECRET = process.env.API_SECRET;
 
-    if (!API_SECRET) {
-      throw new Error("API_SECRET is not defined.");
-    }
+    if (!API_SECRET) throw new Error("API_SECRET is not defined.");
 
     const triggerApiUrl = getAppUrl(
-      `api/workflows/execute?workflowId=${workflowId}`
+      `api/workflows/executeCron?workflowId=${workflowId}`
     );
 
     const response = await fetch(triggerApiUrl, {
@@ -62,11 +59,10 @@ async function triggerWorkflow(workflowId) {
       // signal: AbortSignal.timeout(15000), // Uncomment if timeout is required
     });
 
-    if (!response.ok) {
+    if (!response.ok)
       throw new Error(
         `Failed to trigger workflow (ID: ${workflowId}): ${response.statusText}`
       );
-    }
 
     console.log(`Workflow ${workflowId} triggered successfully.`);
   } catch (error) {
