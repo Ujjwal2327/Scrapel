@@ -4,10 +4,12 @@ import prisma from "@/lib/prisma";
 import { UserError } from "@/lib/errors";
 import { withErrorHandling } from "@/lib/withErrorHandling";
 
-export async function getCredentialByName(name) {
+export async function getCredentialByName(name, userId) {
   return withErrorHandling(
     async () => {
-      const { userId } = await auth();
+      const { userId: userIdFromAuth } = await auth();
+      if (userIdFromAuth) userId = userIdFromAuth;
+
       if (!userId)
         throw new UserError("Authentication required. Please log in.");
 
