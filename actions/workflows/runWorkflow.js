@@ -13,7 +13,6 @@ import {
   WorkflowStatus,
 } from "@/lib/types";
 import {
-  getAppUrl,
   getFlowToExecutionPlanErrorMessage,
   validateExecutionPlan,
 } from "@/lib/utils";
@@ -87,27 +86,11 @@ export async function runWorkflow({ id, definition = null }) {
         },
       });
 
-      // executeWorkflow(execution.id, id); // run in background
-
-      const API_SECRET = process.env.API_SECRET;
-      if (!API_SECRET) throw new Error("API_SECRET is not defined.");
-
-      const triggerApiUrl = getAppUrl(
-        `api/workflows/execute?executionId=${execution.id}&workflowId=${id}`
-      );
-
-      // run in background
-      fetch(triggerApiUrl, {
-        headers: {
-          Authorization: `Bearer ${API_SECRET}`,
-        },
-        cache: "no-store",
-        // signal: AbortSignal.timeout(15000), // Uncomment if timeout is required
-      });
+      executeWorkflow(execution.id, id); // run in background
 
       redirect(`/workflow/runs/${id}/${execution.id}`);
     },
     "runWorkflow",
-    "execute workflow"
+    "start workflow execution"
   );
 }
