@@ -6,25 +6,12 @@ import { UserError } from "@/lib/errors";
 import { withErrorHandling } from "@/lib/withErrorHandling";
 import { CreditsPacks } from "@/lib/constants";
 
-// 20000 upper limit
-export async function purchaseCredits(packId) {
+export async function updateCredits(packId) {
   return withErrorHandling(
     async () => {
       const { userId } = await auth();
       if (!userId)
         throw new UserError("Authentication required. Please log in.");
-
-      const currentBalance = await prisma.userBalance.findUniqueOrThrow({
-        where: {
-          userId,
-        },
-        select: {
-          credits: true,
-        },
-      });
-
-      if (currentBalance.credits + CreditsPacks[packId].credits > 20000)
-        throw new UserError("Credit balance cannot exceed 20,000.");
 
       await prisma.userBalance.upsert({
         where: {
@@ -43,7 +30,7 @@ export async function purchaseCredits(packId) {
 
       revalidatePath("/billing");
     },
-    "purchaseCredits",
-    "purchase credits"
+    "updateCredits",
+    "update credits"
   );
 }
