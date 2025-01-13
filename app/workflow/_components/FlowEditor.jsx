@@ -26,7 +26,7 @@ const fitViewOptions = { padding: 0.15 };
 export function FlowEditor({ workflow }) {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const { screenToFlowPosition, updateNodeData } = useReactFlow();
+  const { setViewport, screenToFlowPosition, updateNodeData } = useReactFlow();
 
   useEffect(() => {
     try {
@@ -34,6 +34,9 @@ export function FlowEditor({ workflow }) {
       if (!flow) return;
       setNodes(flow.nodes || []);
       setEdges(flow.edges || []);
+      if (!flow.viewport) return;
+      const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+      setViewport({ x, y, zoom });
     } catch (error) {
       toast.error("Invalid workflow");
     }
@@ -126,7 +129,7 @@ export function FlowEditor({ workflow }) {
         edgeTypes={edgeTypes}
         snapToGrid
         snapGrid={snapGrid}
-        fitView
+        // fitView
         fitViewOptions={fitViewOptions}
         onDragOver={onDragOver}
         onDrop={onDrop}
