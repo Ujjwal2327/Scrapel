@@ -37,8 +37,9 @@ export function CredentialCard({ credential }) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: decrypt,
-    onSuccess: (value) => {
-      setValue(value);
+    onSuccess: (result) => {
+      if (result?.errorMessage) throw new Error(result?.errorMessage);
+      setValue(result);
     },
     onError: (error) => {
       toast.error(error.message, { id: toastId });

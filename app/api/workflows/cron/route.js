@@ -47,11 +47,11 @@ async function triggerWorkflow(workflowId) {
 
     if (!API_SECRET) throw new Error("API_SECRET is not defined.");
 
-    const triggerApiUrl = getAppUrl(
+    const triggeredApiUrl = getAppUrl(
       `api/workflows/executeCron?workflowId=${workflowId}`
     );
 
-    const response = await fetch(triggerApiUrl, {
+    const response = await fetch(triggeredApiUrl, {
       headers: {
         Authorization: `Bearer ${API_SECRET}`,
       },

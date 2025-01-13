@@ -32,12 +32,10 @@ function ExecutionsTableSkeleton() {
 }
 
 async function ExecutionsTableWrapper({ workflowId }) {
-  const executions = await getWorkflowExecutions(workflowId).catch((error) => ({
-    errorMessage: error.message,
-  }));
+  const executions = await getWorkflowExecutions(workflowId);
 
-  if (executions.errorMessage)
-    return <ErrorAlert message={executions.errorMessage} />;
+  if (executions?.errorMessage)
+    return <ErrorAlert message={executions?.errorMessage} />;
 
   if (!executions.length)
     return (

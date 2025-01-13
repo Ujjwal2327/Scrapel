@@ -11,7 +11,7 @@ export async function getExecutionPhase(id) {
         throw new UserError("Invalid execution phase ID.");
 
       const { userId } = await auth();
-      if (userId)
+      if (!userId)
         throw new UserError("Authentication required. Please log in.");
 
       const executionPhase = await prisma.executionPhase.findUniqueOrThrow({

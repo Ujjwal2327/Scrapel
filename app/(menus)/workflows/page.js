@@ -37,12 +37,10 @@ function UserWorkflowsSkeleton() {
 }
 
 async function UserWorkflows() {
-  const workflows = await getUserWorkflows().catch((error) => ({
-    errorMessage: error.message,
-  }));
+  const workflows = await getUserWorkflows();
 
-  if (workflows.errorMessage)
-    return <ErrorAlert message={workflows.errorMessage} />;
+  if (workflows?.errorMessage)
+    return <ErrorAlert message={workflows?.errorMessage} />;
 
   if (workflows.length === 0) {
     return (

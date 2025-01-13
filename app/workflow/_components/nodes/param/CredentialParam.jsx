@@ -1,4 +1,5 @@
-import { useId } from "react";
+"use client";
+import { useId, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -24,12 +25,18 @@ export function CredentialParam({
 }) {
   const id = useId();
 
-  const { data: credentials, error } = useQuery({
+  const { data: credentials } = useQuery({
     queryKey: ["credentials"],
     queryFn: () => getUserCredentials(),
   });
 
-  if (error) toast.error(error.message);
+  const errorMessage = credentials?.errorMessage;
+  const toastShown = useRef(false);
+
+  if (errorMessage && !toastShown.current) {
+    toast.error(errorMessage);
+    toastShown.current = true; // Ensure the toast is only shown once
+  }
 
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -52,8 +59,8 @@ export function CredentialParam({
           <SelectGroup>
             <SelectLabel>Credentials</SelectLabel>
 
-            {error ? (
-              <ErrorAlert message={error.message} />
+            {errorMessage ? (
+              <ErrorAlert message={errorMessage} />
             ) : credentials ? (
               credentials.length ? (
                 <ScrollArea className="max-h-36 p-0">

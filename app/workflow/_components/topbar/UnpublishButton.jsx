@@ -10,7 +10,8 @@ export function UnpublishButton({ workflowId }) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: unpublishWorkflow,
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (result?.errorMessage) throw new Error(result?.errorMessage);
       toast.success("Workflow unpublished.", { id: toastId });
     },
     onError: (error) => {

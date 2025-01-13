@@ -42,7 +42,8 @@ export function RenameWorkflowDialog({
 
   const { mutate, isPending } = useMutation({
     mutationFn: renameWorkflow,
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (result?.errorMessage) throw new Error(result?.errorMessage);
       toast.success("Workflow renamed.", { id: toastId });
       form.reset();
       setOpen(false);

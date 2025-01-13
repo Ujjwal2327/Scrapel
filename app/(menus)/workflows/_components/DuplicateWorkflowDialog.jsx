@@ -42,7 +42,8 @@ export function DuplicateWorkflowDialog({
 
   const { mutate, isPending } = useMutation({
     mutationFn: duplicateWorkflow,
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (result?.errorMessage) throw new Error(result?.errorMessage);
       toast.success("Workflow duplicated.", { id: toastId });
       form.reset();
       setOpen(false);

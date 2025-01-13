@@ -48,12 +48,10 @@ function UserCredentialsSkeleton() {
 }
 
 async function UserCredentials() {
-  const credentials = await getUserCredentials().catch((error) => ({
-    errorMessage: error.message,
-  }));
+  const credentials = await getUserCredentials();
 
-  if (credentials.errorMessage)
-    return <ErrorAlert message={credentials.errorMessage} />;
+  if (credentials?.errorMessage)
+    return <ErrorAlert message={credentials?.errorMessage} />;
 
   if (credentials.length === 0) {
     return (

@@ -34,14 +34,14 @@ function ExecutionViewerWrapperFallback() {
 }
 
 async function ExecutionViewerWrapper({ executionId }) {
-  const workflowExecution = await getWorkflowExecution(executionId).catch(
-    (error) => ({
-      errorMessage: error.message,
-    })
-  );
+  const workflowExecution = await getWorkflowExecution(executionId);
 
-  if (workflowExecution.errorMessage)
-    return <ErrorAlert message={workflowExecution.errorMessage} />;
+  if (workflowExecution?.errorMessage)
+    return (
+      <div className="w-full">
+        <ErrorAlert message={workflowExecution?.errorMessage} />
+      </div>
+    );
 
   return <ExecutionViewer initialData={workflowExecution} />;
 }

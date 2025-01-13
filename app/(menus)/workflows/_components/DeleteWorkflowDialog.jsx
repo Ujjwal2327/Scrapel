@@ -26,7 +26,8 @@ export function DeleteWorkflowDialog({
 
   const { mutate, isPending } = useMutation({
     mutationFn: deleteWorkflow,
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (result?.errorMessage) throw new Error(result?.errorMessage);
       toast.success("Workflow deleted.", { id: toastId });
     },
     onError: (error) => {

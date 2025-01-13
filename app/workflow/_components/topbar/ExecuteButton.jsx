@@ -14,7 +14,8 @@ export function ExecuteButton({ workflowId }) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: runWorkflow,
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (result?.errorMessage) throw new Error(result?.errorMessage);
       toast.success("Execution started.", { id: toastId });
     },
     onError: (error) => {

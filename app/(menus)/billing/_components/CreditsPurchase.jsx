@@ -34,7 +34,8 @@ export function CreditsPurchase() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: updateCredits,
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (result?.errorMessage) throw new Error(result?.errorMessage);
       toast.success("Credits updated.", { id: toastId });
     },
     onError: (error) => {
@@ -89,7 +90,7 @@ export function CreditsPurchase() {
           contact: "9999999999",
         },
         theme: {
-          color: "#8ec25d",
+          color: "#257541",
         },
       };
 

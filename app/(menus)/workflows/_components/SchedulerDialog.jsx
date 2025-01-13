@@ -44,7 +44,8 @@ export function SchedulerDialog({ workflowId, initialCron }) {
 
   const scheduleMutation = useMutation({
     mutationFn: scheduleWorkflow,
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (result?.errorMessage) throw new Error(result?.errorMessage);
       toast.success("Workflow scheduled.", { id: scheduleToastId });
     },
     onError: (error) => {
@@ -54,7 +55,8 @@ export function SchedulerDialog({ workflowId, initialCron }) {
 
   const unscheduleMutation = useMutation({
     mutationFn: unscheduleWorkflow,
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (result?.errorMessage) throw new Error(result?.errorMessage);
       toast.success("Workflow unscheduled.", { id: unscheduleToastId });
     },
     onError: (error) => {

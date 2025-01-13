@@ -9,22 +9,23 @@ import { TooltipWrapper } from "./TooltipWrapper";
 import { Button } from "@/components/ui/button";
 
 export function UserAvailableCreditsBadge() {
-  const { data, isLoading, isError, error, refetch } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: "user-available-credits",
     queryFn: () => getAvailableCredits(),
     refetchInterval: 30 * 1000,
     // staleTime: 15 * 1000,
   });
 
+  const errorMessage = data?.errorMessage;
   const toastShown = useRef(false);
 
-  if (isError && !toastShown.current) {
-    toast.error(error.message);
+  if (errorMessage && !toastShown.current) {
+    toast.error(errorMessage);
     toastShown.current = true; // Ensure the toast is only shown once
   }
 
   return (
-    <TooltipWrapper content={error?.message} side="bottom">
+    <TooltipWrapper content={errorMessage} side="bottom">
       <Button
         onClick={() => {
           toastShown.current = false; // Reset when refetching
@@ -37,7 +38,7 @@ export function UserAvailableCreditsBadge() {
         <span className="font-semibold capitalize text-foreground">
           {isLoading ? (
             <Loader2 className="w-4 h-4 animate-spin" />
-          ) : !isError && typeof data === "number" && !isNaN(data) ? (
+          ) : !errorMessage && typeof data === "number" && !isNaN(data) ? (
             <ReactCountUpWrapper value={data} />
           ) : (
             <CircleAlert className="stroke-destructive" />

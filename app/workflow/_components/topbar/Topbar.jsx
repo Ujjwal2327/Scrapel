@@ -6,7 +6,6 @@ import { SaveButton } from "./SaveButton";
 import { PublishButton } from "./PublishButton";
 import { UnpublishButton } from "./UnpublishButton";
 import { NavigationTabs } from "./NavigationTabs";
-import { TooltipWrapper } from "@/components/TooltipWrapper";
 import { Button } from "@/components/ui/button";
 
 export function Topbar({
@@ -21,11 +20,9 @@ export function Topbar({
   return (
     <header className="flex flex-wrap gap-x-10 gap-y-3 p-2 border-b-2 border-separate justify-between items-center w-full sticky top-0 bg-background z-10">
       <div className="flex items-center gap-1">
-        <TooltipWrapper content="Back" side="right" delay={700}>
-          <Button variant="ghost" size="icon" onClick={() => router.back()}>
-            <ChevronLeft size={20} />
-          </Button>
-        </TooltipWrapper>
+        <Button variant="ghost" size="icon" onClick={() => router.back()}>
+          <ChevronLeft size={20} />
+        </Button>
         <div>
           <p className="font-bold break-keep">{title}</p>
           {subtitle && (

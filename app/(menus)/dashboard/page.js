@@ -50,12 +50,10 @@ function PeriodSelectorWrapperSkeleton() {
 }
 
 async function PeriodSelectorWrapper({ selectedPeriod }) {
-  const periods = await getPeriods().catch((error) => ({
-    errorMessage: error.message,
-  }));
+  const periods = await getPeriods();
 
-  if (periods.errorMessage)
-    return <ErrorAlert message={periods.errorMessage} />;
+  if (periods?.errorMessage)
+    return <ErrorAlert message={periods?.errorMessage} />;
 
   return <PeriodSelector periods={periods} selectedPeriod={selectedPeriod} />;
 }
@@ -71,11 +69,10 @@ function StatsCardsWrapperSkeleton() {
 }
 
 async function StatsCardsWrapper({ selectedPeriod }) {
-  const values = await getStatsCardsValues(selectedPeriod).catch((error) => ({
-    errorMessage: error.message,
-  }));
+  const values = await getStatsCardsValues(selectedPeriod);
 
-  if (values.errorMessage) return <ErrorAlert message={values.errorMessage} />;
+  if (values?.errorMessage)
+    return <ErrorAlert message={values?.errorMessage} />;
 
   return (
     <StatsCards
@@ -91,13 +88,9 @@ function ExecutionStatsWrapperSkeleton() {
 }
 
 async function ExecutionStatsWrapper({ selectedPeriod }) {
-  const data = await getWorkflowExecutionStats(selectedPeriod).catch(
-    (error) => ({
-      errorMessage: error.message,
-    })
-  );
+  const data = await getWorkflowExecutionStats(selectedPeriod);
 
-  if (data.errorMessage) return <ErrorAlert message={data.errorMessage} />;
+  if (data?.errorMessage) return <ErrorAlert message={data?.errorMessage} />;
 
   return (
     <StatsAreaChart
@@ -118,11 +111,9 @@ function CreditsConsumedStatsWrapperSkeleton() {
 }
 
 async function CreditsConsumedStatsWrapper({ selectedPeriod }) {
-  const data = await getCreditsConsumedStats(selectedPeriod).catch((error) => ({
-    errorMessage: error.message,
-  }));
+  const data = await getCreditsConsumedStats(selectedPeriod);
 
-  if (data.errorMessage) return <ErrorAlert message={data.errorMessage} />;
+  if (data?.errorMessage) return <ErrorAlert message={data?.errorMessage} />;
 
   return (
     <StatsBarChart

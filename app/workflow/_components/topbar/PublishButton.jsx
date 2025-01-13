@@ -14,7 +14,8 @@ export function PublishButton({ workflowId }) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: publishWorkflow,
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (result?.errorMessage) throw new Error(result?.errorMessage);
       toast.success("Workflow published.", { id: toastId });
     },
     onError: (error) => {
