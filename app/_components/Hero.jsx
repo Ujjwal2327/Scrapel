@@ -56,8 +56,8 @@ export function Hero() {
       </h2>
 
       <p className="text-balance text-center text-xl text-muted-foreground max-w-xl">
-        Scrapel empowers you to create and manage web scrapers effortlessly with
-        our drag-and-drop builder.
+        Scrapel empowers you to create, manage and execute web scrapers
+        effortlessly with our drag-and-drop builder.
       </p>
 
       <Link
