@@ -119,9 +119,9 @@ export function Features() {
               <p className="text-muted-foreground">{feature.subHeadline}</p>
               {index === 1 && (
                 <p className="italic text-muted-foreground">
-                  Note: The scheduling feature is currently unavailable due to
-                  financial constraints, as it requires resources for execution
-                  on a schedule.
+                  <strong>Note:</strong> The scheduling feature is currently
+                  unavailable due to financial constraints, as it requires
+                  resources for execution on a schedule.
                 </p>
               )}
             </div>
