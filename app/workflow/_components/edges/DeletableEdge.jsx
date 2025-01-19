@@ -31,7 +31,7 @@ export function DeletableEdge(props) {
             size="icon"
             className="rounded-full text-xs leading-none hover:shadow-lg p-0 w-full h-full"
           >
-            <X className="h-1 w-1 stroke-red-400 opacity-50" />
+            <X className="h-1 w-1 stroke-red-400 opacity-80" />
           </Button>
         </div>
       </EdgeLabelRenderer>

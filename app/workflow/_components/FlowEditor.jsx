@@ -28,6 +28,8 @@ export function FlowEditor({ workflow }) {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { setViewport, screenToFlowPosition, updateNodeData } = useReactFlow();
 
+  const flow = JSON.parse(workflow.definition);
+
   useEffect(() => {
     try {
       const flow = JSON.parse(workflow.definition);
@@ -129,7 +131,7 @@ export function FlowEditor({ workflow }) {
         edgeTypes={edgeTypes}
         snapToGrid
         snapGrid={snapGrid}
-        // fitView
+        fitView={flow.nodes.length === 1}
         fitViewOptions={fitViewOptions}
         onDragOver={onDragOver}
         onDrop={onDrop}

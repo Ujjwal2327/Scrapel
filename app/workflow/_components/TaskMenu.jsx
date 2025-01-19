@@ -123,7 +123,7 @@ function TaskMenuButton({ taskType }) {
       variant="secondary"
       className="flex justify-between items-center gap-2 border w-full"
     >
-      <div className="flex gap-2">
+      <div className="flex gap-2 items-center">
         <task.icon size={20} />
         {task.label}
       </div>
