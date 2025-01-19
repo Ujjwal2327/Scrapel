@@ -31,6 +31,16 @@ export function FlowEditor({ workflow }) {
   const flow = JSON.parse(workflow.definition);
 
   useEffect(() => {
+    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+
+    if (isTouchDevice) {
+      toast("Drag and drop functionality is not supported on touch screens.", {
+        description: "For the best experience, please use a laptop or desktop.",
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     try {
       const flow = JSON.parse(workflow.definition);
       if (!flow) return;
