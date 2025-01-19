@@ -38,7 +38,7 @@ export function TaskMenu() {
           "transition-all duration-300 ease-in-out",
           open
             ? "w-full h-full sm:w-90 sm:h-full opacity-100 pb-10 overflow-y-auto py-2 px-4"
-            : "w-full h-0 sm:w-0 sm:h-full opacity-0"
+            : "w-full h-0 sm:w-0 sm:h-full sm:min-h-10 opacity-0"
         )}
       >
         <Accordion
