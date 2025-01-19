@@ -4,6 +4,14 @@ import { ErrorAlert } from "@/components/ErrorAlert";
 import { Logo } from "@/components/Logo";
 import { Separator } from "@/components/ui/separator";
 
+export function generateMetadata() {
+  return {
+    title: "Setup Your Account - Scrapel | Start Building Your Web Scrapers",
+    description:
+      "Set up your account with default credits and start building your first web scraper effortlessly. Get started with Scrapel's intuitive workflow builder.",
+  };
+}
+
 export default async function SetupPage() {
   const response = await setupUser();
 

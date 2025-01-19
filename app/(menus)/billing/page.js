@@ -8,10 +8,23 @@ import { ReactCountUpWrapper } from "@/components/ReactCountUpWrapper";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
+export function generateMetadata() {
+  return {
+    title: "Billing - Scrapel | Manage Your Credits & Payments",
+    description:
+      "View your billing information, purchase credits, and manage your payment methods on Scrapel. Stay on top of your web scraping tasks with ease.",
+  };
+}
+
 export default function BillingPage() {
   return (
     <div className="flex flex-1 flex-col h-full">
-      <h1 className="text-3xl font-bold">Billing</h1>
+      <div className="flex flex-col">
+        <h1 className="text-3xl font-bold">Billing</h1>
+        <p className="text-muted-foreground">
+          Manage your credits and payments.
+        </p>
+      </div>
       <Suspense fallback={<BillingCardSkeleton />}>
         <BillingCard />
       </Suspense>

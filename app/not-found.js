@@ -1,6 +1,14 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
+export function generateMetadata() {
+  return {
+    title: "404 - Scrapel | Page Not Found",
+    description:
+      "The page you're looking for doesn't exist on Scrapel. Check the URL or return to the homepage and start building your workflows.",
+  };
+}
+
 export default function NotFound() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">

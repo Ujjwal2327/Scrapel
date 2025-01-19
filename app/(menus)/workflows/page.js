@@ -7,13 +7,21 @@ import { WorkflowCard } from "./_components/WorkflowCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorAlert } from "@/components/ErrorAlert";
 
+export function generateMetadata() {
+  return {
+    title: "Workflows - Scrapel | Build Web Scrapers Visually",
+    description:
+      "Manage and create web scrapers with Scrapel’s intuitive workflow builder. Automate tasks and monitor execution with ease.",
+  };
+}
+
 export default function WorkflowsPage() {
   return (
     <div className="flex flex-1 flex-col h-full">
       <div className="flex justify-between flex-wrap gap-x-10 gap-y-4">
         <div className="flex flex-col">
           <h1 className="text-3xl font-bold">Workflows</h1>
-          <p className="text-muted-foreground">Manage your workflows</p>
+          <p className="text-muted-foreground">Manage your workflows.</p>
         </div>
         <CreateWorkflowDialog />
       </div>

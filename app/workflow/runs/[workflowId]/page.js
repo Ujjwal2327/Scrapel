@@ -5,6 +5,14 @@ import { ExecutionsTable } from "./_components/ExecutionsTable";
 import { Topbar } from "../../_components/topbar/Topbar";
 import { ErrorAlert } from "@/components/ErrorAlert";
 
+export function generateMetadata() {
+  return {
+    title: "Workflow Runs - Scrapel | View Past Web Scraping Executions",
+    description:
+      "Review the history of your web scraping workflow executions, analyze run statistics, and track performance over time on Scrapel.",
+  };
+}
+
 export default function WorkflowExecutionHistoryPage({ params }) {
   const { workflowId } = params;
 

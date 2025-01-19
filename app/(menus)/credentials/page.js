@@ -8,13 +8,21 @@ import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { ErrorAlert } from "@/components/ErrorAlert";
 import { Skeleton } from "@/components/ui/skeleton";
 
+export function generateMetadata() {
+  return {
+    title: "Credentials - Scrapel | Secure Your Web Scraping Data",
+    description:
+      "Store and manage your credentials securely with Scrapel. Easily use them in your web scraping workflows to ensure seamless execution.",
+  };
+}
+
 export default function CredentialsPage() {
   return (
     <div className="flex flex-1 flex-col h-full">
       <div className="flex justify-between flex-wrap gap-x-10 gap-y-4">
         <div className="flex flex-col">
           <h1 className="text-3xl font-bold">Credentials</h1>
-          <p className="text-muted-foreground">Manage your credentials</p>
+          <p className="text-muted-foreground">Manage your credentials.</p>
         </div>
         <CreateCredentialDialog />
       </div>

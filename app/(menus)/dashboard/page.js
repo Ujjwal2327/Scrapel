@@ -11,7 +11,15 @@ import { StatsAreaChart } from "@/components/StatsAreaChart";
 import { StatsBarChart } from "@/components/StatsBarChart";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function HomePage({ searchParams }) {
+export function generateMetadata() {
+  return {
+    title: "Dashboard - Scrapel | Monitor Your Web Scraping Workflows",
+    description:
+      "Track the performance of your web scraping workflows, view execution stats, and manage your credits on the Scrapel dashboard.",
+  };
+}
+
+export default function DashboardPage({ searchParams }) {
   const currentDate = new Date();
 
   let { month, year } = searchParams;
@@ -25,7 +33,12 @@ export default function HomePage({ searchParams }) {
   return (
     <div className="flex flex-1 flex-col h-full">
       <div className="flex justify-between">
-        <h1 className="text-3xl font-bold">Home</h1>
+        <div className="flex flex-col">
+          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <p className="text-muted-foreground">
+            Overview of your workflows and activity.
+          </p>
+        </div>
         <Suspense fallback={<PeriodSelectorWrapperSkeleton />}>
           <PeriodSelectorWrapper selectedPeriod={period} />
         </Suspense>

@@ -5,6 +5,14 @@ import { Topbar } from "@/app/workflow/_components/topbar/Topbar";
 import { ExecutionViewer } from "./_components/ExecutionViewer";
 import { ErrorAlert } from "@/components/ErrorAlert";
 
+export function generateMetadata() {
+  return {
+    title: "Workflow Run - Scrapel | Monitor Web Scraping Execution",
+    description:
+      "Track the real-time progress of your web scraping workflow execution, view outputs and errors, and analyze the performance of each run on Scrapel.",
+  };
+}
+
 export default function ExecutionViewerPage({ params }) {
   const { workflowId, executionId } = params;
 
