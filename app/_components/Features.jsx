@@ -101,8 +101,8 @@ export function Features() {
             <Image
               src={
                 currentTheme === "light"
-                  ? features[featureIndex].imgSrcLight
-                  : features[featureIndex].imgSrcDark
+                  ? feature.imgSrcLight
+                  : feature.imgSrcDark
               }
               alt={feature.headline}
               height={400}
