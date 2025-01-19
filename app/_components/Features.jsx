@@ -116,7 +116,14 @@ export function Features() {
               )}
             >
               <h4 className="text-xl font-semibold">{feature.headline}</h4>
-              <p>{feature.subHeadline}</p>
+              <p className="opacity-85">{feature.subHeadline}</p>
+              {index === 1 && (
+                <p className="italic opacity-85">
+                  Note: The scheduling feature is currently unavailable due to
+                  financial constraints, as it requires resources for execution
+                  on a schedule.
+                </p>
+              )}
             </div>
           </div>
         ))}
@@ -136,6 +143,13 @@ export function Features() {
               </AccordionTrigger>
               <AccordionContent className="text-[15px] text-muted-foreground">
                 {feature.subHeadline}
+                {index === 1 && (
+                  <p className="italic mt-2">
+                    <strong>Note:</strong> The scheduling feature is currently
+                    unavailable due to financial constraints, as it requires
+                    resources for execution on a schedule.
+                  </p>
+                )}
               </AccordionContent>
             </AccordionItem>
           ))}
