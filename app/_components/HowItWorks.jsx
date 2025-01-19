@@ -1,7 +1,7 @@
 import { ChartNoAxesCombined, Layers2, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export async function HowItWorks() {
+export function HowItWorks() {
   const steps = [
     {
       headline: "Build Your Workflow",
