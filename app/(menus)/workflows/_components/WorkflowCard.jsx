@@ -85,7 +85,9 @@ export function WorkflowCard({ workflow }) {
         </div>
         <div className="flex items-center space-x-2">
           {!isDraft && (
-            <ExecutePublishedWorkflowButton workflowId={workflow.id} />
+            <div className="hidden xs:block">
+              <ExecutePublishedWorkflowButton workflowId={workflow.id} />
+            </div>
           )}
           <Link
             href={`/workflow/editor/${workflow.id}`}
@@ -189,10 +191,10 @@ function ScheduleSection({ workflowId, isDraft, creditsCost, cron }) {
   if (isDraft) return null;
 
   return (
-    <div className="flex items-center gap-2">
-      <CornerDownRight className="h-4 w-4 text-muted-foreground" />
+    <div className="flex items-center gap-2 flex-wrap">
+      <CornerDownRight className="h-4 w-4 hidden xs:block text-muted-foreground" />
       <SchedulerDialog workflowId={workflowId} initialCron={cron} />
-      <MoveRight className="h-4 w-4 text-muted-foreground" />
+      <MoveRight className="h-4 w-4 hidden xs:block text-muted-foreground" />
       <div className="flex items-center gap-3">
         <Badge
           variant="outline"
@@ -223,27 +225,35 @@ function LastRunDetails({ workflow, isDraft }) {
         {lastRunAt ? (
           <Link
             href={`/workflow/runs/${workflow.id}/${lastRunId}`}
-            className="flex items-center text-sm gap-2 group"
+            className="flex items-center text-sm gap-x-3 gap-y-1 group"
           >
             <span className="font-semibold">Last run:</span>
-            <ExecutionStatusIndicator status={lastRunStatus} />
-            <ExecutionStatusLabel status={lastRunStatus} />
-            <span>{formattedStartedAt}</span>
-            <ChevronRight
-              size={14}
-              className="-translate-x-0.5 group-hover:translate-x-0 transition"
-            />
+            <div className="flex items-center gap-x-1.5">
+              <ExecutionStatusIndicator status={lastRunStatus} />
+              <ExecutionStatusLabel status={lastRunStatus} />
+            </div>
+            <div className="flex items-center gap-x-2">
+              <span>{formattedStartedAt}</span>
+              <ChevronRight
+                size={14}
+                className="-translate-x-0.5 group-hover:translate-x-0 transition"
+              />
+            </div>
           </Link>
         ) : (
           <p>No runs yet</p>
         )}
       </div>
       {nextRunAt && (
-        <div className="flex items-center text-sm gap-2">
-          <Clock size={12} />
-          <span className="font-semibold">Next run at:</span>
+        <div className="flex items-center text-sm gap-x-3 gap-y-1">
+          <div className="flex items-center gap-x-1.5">
+            <Clock size={12} />
+            <span className="font-semibold">Next run at:</span>
+          </div>
           <span>{nextSchedule}</span>
-          <span className="text-xs">({nextScheduleUTC} UTC)</span>
+          <span className="text-xs hidden xs:block">
+            ({nextScheduleUTC} UTC)
+          </span>
         </div>
       )}
     </div>

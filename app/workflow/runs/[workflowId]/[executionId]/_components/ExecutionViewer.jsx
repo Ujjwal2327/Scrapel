@@ -129,6 +129,13 @@ export function ExecutionViewer({ initialData }) {
       setSelectedPhase(phaseToSelect.id);
   }, [workflowExecution, selectedPhase]);
 
+  // in small devices, if phase is selected, set open false
+  useEffect(() => {
+    const isSmallScreen = window?.matchMedia("(max-width: 640px)")?.matches;
+
+    if (selectedPhase && isSmallScreen) setOpen(false);
+  }, [selectedPhase]);
+
   return (
     <div className="flex w-full h-full">
       <Sidebar
@@ -270,9 +277,9 @@ function Sidebar({
             e.stopPropagation(); // Prevent resetting `selectedPhase`
             setOpen((prev) => !prev);
           }}
-          variant="ghost"
+          variant="secondary"
           size="icon"
-          className="self-start"
+          className="self-start sticky top-0"
         >
           <PanelLeft />
         </Button>

@@ -19,26 +19,31 @@ export function TaskMenu() {
   return (
     <div
       className={cn(
-        "sm:h-full flex flex-col items-center",
-        open && "border-b-2 sm:border-b-0 sm:border-r-2"
+        "sm:h-full h-12 flex flex-col items-center overflow-y-auto sm:overflow-hidden",
+        open
+          ? "border-b-2 sm:border-b-0 sm:border-r-2 h-full relative sm:overflow-auto sm:min-w-[380px]"
+          : "overflow-y-hidden"
       )}
     >
       <TooltipWrapper content="Toggle menu" side="right" delay={700}>
         <Button
-          onClick={() => setOpen((prev) => !prev)}
-          variant="ghost"
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent resetting `selectedPhase`
+            setOpen((prev) => !prev);
+          }}
+          variant="secondary"
           size="icon"
-          className="self-start"
+          className="self-start sticky min-h-10"
         >
           <PanelLeft />
         </Button>
       </TooltipWrapper>
       <aside
         className={cn(
-          "transition-all duration-300 ease-in-out",
+          "transition-all duration-300 ease-in-out -mt-3",
           open
-            ? "w-full h-full sm:w-90 sm:h-full opacity-100 pb-10 overflow-y-auto py-2 px-4"
-            : "w-full h-0 sm:w-0 sm:h-full sm:min-h-10 opacity-0"
+            ? "w-full sm:w-90 sm:min-w-90 opacity-100 px-4"
+            : "w-0 h-0 opacity-0"
         )}
       >
         <Accordion
