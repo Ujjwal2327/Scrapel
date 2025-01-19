@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
@@ -20,6 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 
 export function CreateWorkflowDialog({ triggerText = "Create workflow" }) {
@@ -31,6 +32,7 @@ export function CreateWorkflowDialog({ triggerText = "Create workflow" }) {
     defaultValues: {
       name: "",
       description: "",
+      isDemo: false,
     },
   });
 
@@ -52,6 +54,16 @@ export function CreateWorkflowDialog({ triggerText = "Create workflow" }) {
     },
     [mutate]
   );
+
+  useEffect(() => {
+    if (form.getValues("isDemo") && !form.getValues("name").trim())
+      form.setValue("name", "Demo Workflow");
+    if (form.getValues("isDemo") && !form.getValues("description").trim())
+      form.setValue(
+        "description",
+        "This demo workflow will log you in to quotes.toscrape.com"
+      );
+  }, [form.getValues("isDemo")]);
 
   return (
     <Dialog
@@ -75,6 +87,24 @@ export function CreateWorkflowDialog({ triggerText = "Create workflow" }) {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
+                name="isDemo"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                      <FormLabel>Demo Workflow</FormLabel>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
@@ -92,6 +122,7 @@ export function CreateWorkflowDialog({ triggerText = "Create workflow" }) {
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="description"
@@ -116,6 +147,7 @@ export function CreateWorkflowDialog({ triggerText = "Create workflow" }) {
                   </FormItem>
                 )}
               />
+
               <Button type="submit" disabled={isPending} className="w-full">
                 {!isPending ? "Proceed" : <Loader2 className="animate-spin" />}
               </Button>
