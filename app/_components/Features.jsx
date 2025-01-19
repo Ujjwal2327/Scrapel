@@ -116,9 +116,9 @@ export function Features() {
               )}
             >
               <h4 className="text-xl font-semibold">{feature.headline}</h4>
-              <p className="opacity-85">{feature.subHeadline}</p>
+              <p className="text-muted-foreground">{feature.subHeadline}</p>
               {index === 1 && (
-                <p className="italic opacity-85">
+                <p className="italic text-muted-foreground">
                   Note: The scheduling feature is currently unavailable due to
                   financial constraints, as it requires resources for execution
                   on a schedule.
