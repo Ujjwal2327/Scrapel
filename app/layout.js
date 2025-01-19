@@ -29,7 +29,7 @@ export const metadata = {
     url: "https://scrapel.vercel.app/",
     images: [
       {
-        url: "/card.png",
+        url: "https://scrapel.vercel.app/card.png",
         width: 1200,
         height: 630,
         alt: "Scrapel - Web Scraping Made Easy",
@@ -43,7 +43,7 @@ export const metadata = {
     title: "Scrapel - Build Web Scrapers Visually",
     description:
       "Create, manage, and execute web scrapers effortlessly with Scrapel's intuitive drag-and-drop workflow builder.",
-    image: "/card.png",
+    image: "https://scrapel.vercel.app/card.png",
   },
 };
 
