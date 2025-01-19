@@ -13,7 +13,7 @@ export function Footer() {
     >
       <div className="w-full max-w-4xl flex justify-between items-center flex-col sm:flex-row gap-y-4">
         <Logo id="hero" />
-        <div className="flex gap-x-4">
+        <div className="grid xs:grid-cols-4 gap-x-4 gap-y-1">
           {links.map((link) => (
             <Link
               key={link}
