@@ -133,8 +133,9 @@ export function ExecutionViewer({ initialData }) {
   useEffect(() => {
     const isSmallScreen = window?.matchMedia("(max-width: 640px)")?.matches;
 
-    if (selectedPhase && isSmallScreen) setOpen(false);
-  }, [selectedPhase]);
+    if (isSelectedPhaseCompleted && selectedPhase && isSmallScreen)
+      setOpen(false);
+  }, [selectedPhase, isSelectedPhaseCompleted]);
 
   return (
     <div className="flex w-full h-full">
@@ -265,7 +266,7 @@ function Sidebar({
   return (
     <div
       // Reset selectedPhase on any sidebar click
-      onClick={() => setSelectedPhase(null)}
+      onClick={() => (open ? setSelectedPhase(null) : setOpen(true))}
       className={cn(
         "max-h-full overflow-y-auto",
         open ? "border-r-2" : "overflow-hidden h-10 w-10 absolute"
