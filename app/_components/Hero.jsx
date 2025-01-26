@@ -68,8 +68,8 @@ export function Hero() {
         Get Started for Free
       </Link>
 
-      <div class="p-[2px] bg-gradient-to-r from-green-400 via-green-500 to-green-600 rounded-xl z-10">
-        <div class="bg-background rounded-xl">
+      <div className="p-[2px] bg-gradient-to-r from-green-400 via-green-500 to-green-600 rounded-xl z-10">
+        <div className="bg-background rounded-xl">
           <Image
             src={
               currentTheme === "light" ? `/hero/light.png` : `/hero/dark.png`

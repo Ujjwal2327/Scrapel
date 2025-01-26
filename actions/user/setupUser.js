@@ -12,15 +12,17 @@ export async function setupUser() {
       if (!userId)
         throw new UserError("Authentication required. Please log in.");
 
-      await prisma.userBalance.upsert({
-        where: {
-          userId,
-        },
-        update: {},
-        create: {
-          userId,
-          credits: 250,
-        },
+      await prisma.$transaction(async (tx) => {
+        await tx.userBalance.upsert({
+          where: {
+            userId,
+          },
+          update: {},
+          create: {
+            userId,
+            credits: 250,
+          },
+        });
       });
 
       redirect("/workflows");
