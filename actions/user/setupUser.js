@@ -12,8 +12,8 @@ export async function setupUser() {
       if (!userId)
         throw new UserError("Authentication required. Please log in.");
 
-      await prisma.$transaction(async (tx) => {
-        await tx.userBalance.upsert({
+      try {
+        await prisma.userBalance.upsert({
           where: {
             userId,
           },
@@ -23,7 +23,15 @@ export async function setupUser() {
             credits: 250,
           },
         });
-      });
+      } catch (error) {
+        if (error.code === "P2002") {
+          console.warn(
+            `Prisma error in setupUser - Unique constraint violation for userId: ${userId}. Another request might have created the record.`
+          );
+        } else {
+          throw error;
+        }
+      }
 
       redirect("/workflows");
     },
