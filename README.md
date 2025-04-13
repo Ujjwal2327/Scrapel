@@ -28,7 +28,6 @@ A powerful, no-code web scraping platform that allows users to easily create, ex
 - **Fullstack Framework**: Next.js  
 - **Database**: PostgreSQL (with Prisma ORM)  
 - **Authentication**: Clerk  
-- **State Management**: Tanstack Query, React Flow  
 - **UI Libraries**: CSS, Tailwind CSS, Shadcn UI  
 - **Workflow Editor**: React Flow  
 - **Web Scraping**: Puppeteer  
